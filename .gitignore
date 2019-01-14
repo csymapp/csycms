@@ -4,6 +4,7 @@ todo
 .env
 system.config.js
 content
+content.bac
 
 # Logs
 logs
