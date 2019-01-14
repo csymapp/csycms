@@ -3,18 +3,18 @@
 mkdir -p /var/www/html
 cd /var/www/html
 git clone https://github.com/csymapp/csycms.git
-cd csymapp
+cd csycms
 npm install
 cd Install
-cp -r lib/ /
+sudo cp -r lib/ /
 cd ..
 cd config
 cp system.config.example system.config.js
 cd ..
 cp -r content.example content
 cp .env.example .env
-systemctl daemon-reload
-systemctl enable csycms.service
-systemctl start csycms.service
-systemctl restart csycms.service
-systemctl status csycms.service
+sudo systemctl daemon-reload
+sudo systemctl enable csycms.service
+sudo systemctl start csycms.service
+sudo systemctl restart csycms.service
+sudo systemctl status csycms.service
