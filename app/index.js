@@ -25,12 +25,17 @@ function initialize (config) {
   }
 
   // Content_Dir requires trailing slash
+  console.log(config.content_dir)
+  console.log(config.content_dir)
+  console.log(config.content_dir)
+  console.log(config.content_dir)
+  console.log(config.content_dir)
+  console.log(config.content_dir)
   let pageList = csystem.loadPagesList(config.content_dir)
   // load contents of config_dir
 
   if (config.content_dir[config.content_dir.length - 1] !== path.sep) { config.content_dir += path.sep; }
 
-  console.log('opening files...')
   // Load Files
   var authenticate              = require('./middleware/authenticate.js')               (config, pageList);
   var always_authenticate       = require('./middleware/always_authenticate.js')        (config, pageList);

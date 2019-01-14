@@ -16,7 +16,7 @@ var csycms = require('../app/index.js');
 // Then, we load our configuration file
 // This can be done inline, with a JSON file,
 // or with a Node.js module as we do below.
-var config = require('../config/system.config.js');
+var config = require('../config/system.config.js')(__dirname);
 
 // Finally, we initialize csycms
 // with our configuration object
