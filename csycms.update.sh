@@ -10,7 +10,7 @@ GITOLD="$(echo $GIT | cut -d' ' -f2)"
 
 readConfig () {
     set -a
-    source ../.env
+    source .env
     set +a
 }
 
