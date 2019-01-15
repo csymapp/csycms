@@ -27,6 +27,12 @@ Supported Node Versions:
 - v10.x.x
 - v8.x.x
 
+See [how to install nodejs](https://joshtronic.com/2018/05/07/how-to-install-the-latest-version-of-nodejs-8-on-ubuntu-1804-lts/).
+
+You may also have to fix [killall-command-no](https://bytefreaks.net/gnulinux/bash/bash-killall-command-not-found-a-solution)
+
+If the installation fails to create the ssh keys for your git repo, you can [see how to create one](https://confluence.atlassian.com/bitbucket/set-up-an-ssh-key-728138079.html).
+
 **[⬆ back home](#table-of-contents)**
 
 # QuickStart

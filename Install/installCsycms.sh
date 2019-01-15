@@ -8,6 +8,11 @@ editFile?() {
     nano $1
 }
 
+pass() {
+    echo "done"
+}
+
+
 #
 # ask a Yes/No question
 # usage: askYesNoQuestion "question" function_to_run_if_answer_is_yes
@@ -81,9 +86,12 @@ main() {
         ssh-keygen
         eval `ssh-agent`
         ssh-add ~/.ssh/id_git
-        echo "Mr. Brian: Put the key below into your github/bitbucket site repo"; tput sgr0
+        echo "Mr. Brian: Put the key below into your github/bitbucket site repo before continuing with the installation"; tput sgr0
         cat ~/.ssh/id_git.pub
+
+        askYesNoQuestion "Have you finished setting up the ssh keys? y/n" pass
     }
+
     
     tput bold;  echo "Mr. Brian: I am now trying to start the service."; tput sgr0
     sudo systemctl daemon-reload

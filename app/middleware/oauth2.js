@@ -128,6 +128,7 @@ function router (config) {
 
     // Redirect back to the original page, if any
     function (req, res) {
+      if(!req.session)req.session = {}
       req.session.loggedIn = true;
       if (config.oauth2.validateHostedDomain) {
         req.session.allowedDomain = config.oauth2.hostedDomain;
@@ -142,6 +143,7 @@ function router (config) {
   // Deletes the user's credentials and profile from the session.
   // This does not revoke any active tokens.
   router.get('/auth/logout', function (req, res) {
+    if(!req.session)req.session = {}
     req.session.loggedIn = false;
     req.logout();
     res.redirect('/login');
