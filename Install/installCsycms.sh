@@ -61,7 +61,6 @@ main() {
     sudo cp -r lib/ /
     cd ..
     
-    
     tput bold;  echo "Mr. Brian: I am copying config files."; tput sgr0
     cd config
     cp system.config.example system.config.js

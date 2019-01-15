@@ -1,4 +1,4 @@
-# CSYCMS - CSYBER SYSTEMS CONTENT MANAGEMENT SYSTEM
+# CSYCMS - CSYBER SYSTEMS CMS
 
 CSYCMS is a **Fast**, **Simple**, and **Flexible**, file-based content management system for nodejs. It uses static Markdown files to serve the content which are pulled from public/private repos in github. bitcket, gitlab or any other git repository management services. It runs services that enables it to auto update itself and the content it serves. It follows similar principles to other flat-file CMS platforms, and allows you to use the structure of content files used in the [most popular flat file cms](https://getgrav.org/downloads)
  but in nodejs. 
