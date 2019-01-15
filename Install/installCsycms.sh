@@ -47,16 +47,16 @@ main() {
     tput bold;  echo "Mr. Brian: I am now setting up system defaults for you with your root user."; tput sgr0
     tput bold;  echo "Mr. Brian: I am cloning into /var/www/html."; tput sgr0
     
-    mkdir -p /var/www/html
+    sudo mkdir -p /var/www/html
     cd /var/www/html
-    git clone https://github.com/csymapp/csycms.git
+    sudo git clone https://github.com/csymapp/csycms.git
     cd csycms
     
     tput bold;  echo "Mr. Brian: I am checking for updates."; tput sgr0
-    git pull origin master
+    sudo git pull origin master
     
     tput bold;  echo "Mr. Brian: I am installing node modules."; tput sgr0
-    npm install
+    sudo npm install
     
     
     
