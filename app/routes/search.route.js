@@ -47,6 +47,7 @@ function route_search (config, reffilePaths) {
     // console.log(pageListSearch)
     // console.log("33333333333333333333333333333333333333333333")
     // pageListSearch = []
+    if(!req.session)req.session = {}
     return res.render('search', {
       config        : config,
       // pages         : pageListSearch,

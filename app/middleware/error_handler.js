@@ -4,7 +4,7 @@
 // Error-Handling Middleware
 function handler (config) {
   return function (err, req, res, next) {
-
+    if(!req.session)req.session = {}
     var status = err.status || 500;
 
     res.status(status);

@@ -5,6 +5,7 @@ function middleware_authenticate (config) {
   if (config.authentication === true) {
     // Authentication Middleware
     return function (req, res, next) {
+      if(!req.session)req.session = {}
       if (!req.session.loggedIn) {
         if (config.googleoauth === true) {
           res.redirect(403, '/login');

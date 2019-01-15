@@ -50,7 +50,7 @@ function route_home (config, reffilePaths) {
     //     })
     //     .value());
 
-      
+    if(!req.session)req.session = {}
     return res.render('home', {
       config        : config,
       // pages         : build_nested_pages(pageList),

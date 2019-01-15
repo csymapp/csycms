@@ -4,6 +4,7 @@ function middleware_authenticate_read_access (config) {
 
   if (config.authentication === true && config.authentication_for_edit === false) {
     return function (req, res, next) {
+      if(!req.session)req.session = {}
       if (!req.session.loggedIn) {
         if (req.path === '/rn-login' ||
             req.path === '/logout'   ||

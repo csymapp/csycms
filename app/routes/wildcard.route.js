@@ -15,6 +15,7 @@ const utils = require('../core/utils');
 
 function route_wildcard (config, reffilePaths) {
   return function (req, res, next) {
+    if(!req.session)req.session = {}
     // Skip if nothing matched the wildcard Regex
     if (!req.params[0]) { return next(); }
 

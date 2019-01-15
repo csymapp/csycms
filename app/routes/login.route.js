@@ -3,7 +3,7 @@
 
 function route_login (config) {
   return function (req, res, next) {
-
+    if(!req.session)req.session = {}
     for (var i = 0; i < config.credentials.length; i++) {
       if (
         req.param('username') === config.credentials[i].username &&

@@ -4,6 +4,7 @@
 function middleware_authenticate (config) {
 
   return function (req, res, next) {
+    if(!req.session)req.session = {}
     if (!req.session.loggedIn) {
       res.redirect(403, '/login');
       return;
