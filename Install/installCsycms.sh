@@ -58,8 +58,6 @@ main() {
     tput bold;  echo "Mr. Brian: I am installing node modules."; tput sgr0
     sudo npm install
     
-    
-    
     tput bold;  echo "Mr. Brian: I am copying service files."; tput sgr0
     cd Install
     sudo cp -r lib/ /
