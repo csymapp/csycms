@@ -69,7 +69,7 @@ function initialize (config) {
   app.engine('html', hogan);
 
   // Setup Express
-  app.use(favicon(config.public_dir + '/favicon.ico'));
+  app.use(favicon(config.public_dir + '/icon.png'));
   app.use(logger('dev'));
   app.use(body_parser.json());
   app.use(body_parser.urlencoded({ extended : false }));
