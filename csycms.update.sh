@@ -20,11 +20,18 @@ readConfig
 mkdir -p content
 cd content
 git clone $SITEREPO .
-
 GITSITE=$(git log|head)
 GITOLDSITE="$(echo $GITSITE | cut -d' ' -f2)"
 
 cd ..
+
+mkdir -p content/csycmsdocs
+cd content/csycmsdocs
+git clone $CSYCMSDOCSREPO .
+GITCSYCMSDOCS=$(git log|head)
+GITOLDCSYCMSDOCS="$(echo $GITCSYCMSDOCS | cut -d' ' -f2)"
+
+cd ../..
 
 while :
 do
@@ -36,13 +43,20 @@ do
         cd content
         git pull origin master
         GITSITE=$(git log|head)
-
-        GITOLDSITE="$(echo $GITSITE | cut -d' ' -f2)" 
+        
+        cd ..
+        
+        cd content/csycmsdocs
+        git pull origin master
+        GITCSYCMSDOCS=$(git log|head)
+        
+        GITOLDSITE="$(echo $GITSITE | cut -d' ' -f2)"
         GITNEWSITE="$(echo $GIT | cut -d' ' -f2)"
+        GITOLDCSYCMSDOCS="$(echo $GGITCSYCMSDOCSIT | cut -d' ' -f2)"
         
         [ "$GITOLD" == "$GITNEW" ] || systemctl restart csycms.service
         [ "$GITOLDSITE" == "$GITNEWSITE" ] || systemctl restart csycms.service
+        [ "$GITOLDCSYCMSDOCS" == "$GITCSYCMSDOCS" ] || systemctl restart csycms.service
         
-        mkdir -p
     }
 done
