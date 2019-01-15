@@ -78,12 +78,12 @@ main() {
     cp .env.example .env
     askYesNoQuestion "Would you like to edit .env file now? Y(es)/N(o)? Please answer Yes if this is the first time you are doing this setup." "configureEnv?"
     
-    tput bold;  echo "Mr. Brian: I am Setting Up SSH Keys for bitbucket/github. Please save the private key as id_git.perm"; tput sgr0
+    tput bold;  echo "Mr. Brian: I am Setting Up SSH Keys for bitbucket/github. Please save the private key as ~/.ssh/id_git"; tput sgr0
     
     cat ~/.ssh/id_git.pub || {
         ssh-keygen
         eval `ssh-agent`
-        ssh-add ~/.ssh/id_git.perm
+        ssh-add ~/.ssh/id_git
         cat ~/.ssh/id_git.pub
     }
     
