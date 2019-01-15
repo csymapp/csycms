@@ -35,7 +35,7 @@ These are the options to get CSYCMS:
 
 ### From GitHub
 
-We have created an [installation script](/Install.installCsycms.sh) which you can use to install CSYCMS. 
+We have created an [installation script](/Install/installCsycms.sh) which you can use to install CSYCMS. 
 
 ```
     cd /tmp
@@ -61,7 +61,7 @@ You will also need to do a bit of configuration in `.env`.
 
 *CSYCMSDOCSREPO* is the repository where the csycms docs is hosted. You may not need to change this. CSYCMS docs will be added to you site under `csycms docs` directory.
 
-For detailed documentation please refer to (csycms docs)[http://learn.csycms.csymapp.com] or (csycms docs)[https://github.com/csymapp/csycms-learn]
+For detailed documentation please refer to [csycms docs](http://learn.csycms.csymapp.com) or [csycms docs](https://github.com/csymapp/csycms-learn)
 
 **[⬆ back home](#table-of-contents)**
 
@@ -75,6 +75,8 @@ How frequently would you like CSYCMS to check for updates to itself to your site
 # Contributing
 We appreciate any contribution to CSYCMS, whether it is related to bugs, grammar, or simply a suggestion or improvement! Please refer to the [Contributing guide](CONTRIBUTE.md) for more guidance on this topic.
 
+**[⬆ back home](#table-of-contents)**
+
 ## Security issues
 If you discover a possible security issue related to CSYCMS, please send an email to brian@cseco.co.ke and cc surgbc@gmail.com and we'll address it as soon as possible.
 
@@ -87,5 +89,7 @@ See [LICENSE](LICENSE.txt)
 **[⬆ back home](#table-of-contents)**
 
 # Todo
-- [] Authentication
-- [] Generating meta data
+- [ ] Authentication
+- [ ] Generating meta data
+
+**[⬆ back home](#table-of-contents)**
