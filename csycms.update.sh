@@ -1,13 +1,5 @@
 #!/bin/bash
 
-checktime=60 #1 hour	 #time in minutes after which to check for new software
-
-#times in seconds
-checktime=$((checktime * 60))
-
-GIT=$(git log|head)
-GITOLD="$(echo $GIT | cut -d' ' -f2)"
-
 readConfig () {
     set -a
     source .env
@@ -16,18 +8,26 @@ readConfig () {
 
 readConfig
 
+checktime=$UPDATEINTERVAL #1 hour	 #time in minutes after which to check for new software
 
-mkdir -p content
+#times in seconds
+checktime=$((checktime * 60))
+
+GIT=$(git log|head)
+GITOLD="$(echo $GIT | cut -d' ' -f2)"
+
+
+sudo mkdir -p content
 cd content
-git clone $SITEREPO .
+sudo git clone $SITEREPO .
 GITSITE=$(git log|head)
 GITOLDSITE="$(echo $GITSITE | cut -d' ' -f2)"
 
 cd ..
 
-mkdir -p content/csycmsdocs
+sudo mkdir -p content/csycmsdocs
 cd content/csycmsdocs
-git clone $CSYCMSDOCSREPO .
+sudo git clone $CSYCMSDOCSREPO .
 GITCSYCMSDOCS=$(git log|head)
 GITOLDCSYCMSDOCS="$(echo $GITCSYCMSDOCS | cut -d' ' -f2)"
 
@@ -37,17 +37,17 @@ while :
 do
     {
         sleep $checktime
-        git pull origin master
+        sudo git pull origin master
         GIT=$(git log|head)
         
         cd content
-        git pull origin master
+        sudo git pull origin master
         GITSITE=$(git log|head)
         
         cd ..
         
         cd content/csycmsdocs
-        git pull origin master
+        sudo git pull origin master
         GITCSYCMSDOCS=$(git log|head)
         
         GITOLDSITE="$(echo $GITSITE | cut -d' ' -f2)"

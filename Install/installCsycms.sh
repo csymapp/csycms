@@ -36,8 +36,6 @@ askYesNoQuestion() {
     esac
 }
 
-
-
 main() {
     setUpDir=$(pwd)
     echo "Hello there. Greetings from Mr. Brian"
@@ -84,6 +82,7 @@ main() {
         ssh-keygen
         eval `ssh-agent`
         ssh-add ~/.ssh/id_git
+        echo "Mr. Brian: Put the key below into your github/bitbucket site repo"; tput sgr0
         cat ~/.ssh/id_git.pub
     }
     
