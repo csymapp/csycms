@@ -25,12 +25,6 @@ function initialize (config) {
   }
 
   // Content_Dir requires trailing slash
-  console.log(config.content_dir)
-  console.log(config.content_dir)
-  console.log(config.content_dir)
-  console.log(config.content_dir)
-  console.log(config.content_dir)
-  console.log(config.content_dir)
   let pageList = csystem.loadPagesList(config.content_dir)
   // load contents of config_dir
 
