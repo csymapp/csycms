@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{#meta.title}}{{meta.title}} - {{/meta.title}}{{config.site_title}}</title>
-    {{#meta.description}}<meta name="description" content="{{meta.description}}">{{/meta.description}}
+    {{#meta.metadata.description}}<meta name="description" content="{{meta.metadata.description}}">{{/meta.metadata.description}}
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="shortcut icon" href="{{config.base_url}}/icon.png">
@@ -91,6 +91,16 @@
                                                 <span>{{title}}</span>
                                             </a>
                                         </li>
+                                        <ul>
+                                            {{#files}}
+                                            <li class="dd-item {{#active}} active{{/active}}" data-nav-id="{{config.base_url}}/{{slug}}">
+                                                <a href="{{slug}}">
+                                                    <i class="fa fa-check read-icon"></i>
+                                                    <span>{{title}}</span>
+                                                </a>
+                                            </li>
+                                            {{/files}}
+                                        </ul>
                                         {{/files}}
                                     </ul>
                                 </li>
@@ -111,7 +121,7 @@
                         History</a><br />
 
                     <section id="footer">
-                        <p>Built with <a href="http://getgrav.org">csyms</a> - A Flat File CMS for node</p>
+                        <p>Built with <a href="http://csycms.csymapp.com">csyms</a> - A Flat File CMS for node</p>
                         <p>
                             {{#config.copyright}}
                             <p>{{{config.copyright}}}</p>

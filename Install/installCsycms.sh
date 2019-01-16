@@ -72,8 +72,8 @@ main() {
     askYesNoQuestion "Would you like to edit system config now? y/n" editFile? "system.config.js"
     cd ..
     
-    tput bold;  echo "Mr. Brian: I am copying content files."; tput sgr0
-    cp -r content.example content
+    # tput bold;  echo "Mr. Brian: I am copying content files."; tput sgr0
+    # cp -r content.example content
     
     
     tput bold;  echo "Mr. Brian: I am copying env files."; tput sgr0

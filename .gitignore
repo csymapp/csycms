@@ -3,8 +3,9 @@ todo
 .bac
 .env
 system.config.js
-content
-content.bac
+content/
+content.bac/
+example/
 
 # Logs
 logs

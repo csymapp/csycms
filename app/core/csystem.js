@@ -42,47 +42,63 @@ class Csystem
                 return accumulator
         }, {pageListWithTitle:[] })
 
-        nestedPages = self.build_nested_pages_inner(pageListWithTitle, 0)
-        return nestedPages.slice(1)
+        nestedPages = self.build_nested_pages_inner(pageListWithTitle, 0).slice(1)
+        return nestedPages
     }
 
-    build_nested_pages_inner(pageListWithTitle, level) {
+    build_nested_pages_inner(pageListWithTitle, level, debug) {
         let self = this
         , chapters = []
         , prevChapterNum = 0
+        , prevDir = ''
         ,  getIndex = (list, Indexinner) => {
             for(let i in list) {
                 if(list[i].index === Indexinner)return i
             }
             return NaN
         }
+
+        if(debug) {
+            console.log(pageListWithTitle)
+        }
+
+
         for(let i in pageListWithTitle) {
             let filePath = pageListWithTitle[i].path
-            
             let parts = filePath.split('.')
             let chapterNum = parseInt(parts[0].replace('/', ''))
-            if(!isNaN(chapterNum));
+            let thisDir = filePath.split('/')[1]
+            if(filePath === '/docs.md')continue;
+            if(!isNaN(chapterNum)){
+                if(debug)   {
+                    console.log(parts)
+                }
+            }
             else {
-                chapterNum = prevChapterNum + 1
+                if(thisDir !== prevDir)
+                    chapterNum = prevChapterNum + 1
             }
             prevChapterNum = chapterNum
+            prevDir = filePath.split('/')[1]
             
             if(!chapters[chapterNum]) {
                 parts = filePath.split('/')
                 let folderPart = '/' + parts[1];
+                
                 let {numFiles, files_in_dir} = pageListWithTitle.reduce((accumulator, currentValue, currentIndex, originalPageListArray) => {
-                    
                     let testLen = currentValue.path.split('/').length
-                    
+
                     let testLenResult = testLen===3 || testLen===4?true:false;
-                    if(currentValue.path.indexOf(accumulator.needle) === 0) {
-                        
+                    let threeparts = currentValue.path.split('/')
+                    threeparts = [threeparts[0],threeparts[1],threeparts[2]].join('/')
+                    if(debug)console.log(`${accumulator.needle}=>${currentValue.path}`)
+                    if(currentValue.path.indexOf(accumulator.needle) === 0 && currentValue.path !== '/docs.md') {
                         accumulator.numFiles++
                         accumulator.files_in_dir.push({name:currentValue.path , index: currentValue.index})
                     }
                     
                     return accumulator
-                }, {needle:folderPart, numFiles:0, files_in_dir:[] })
+                }, {needle:folderPart, numFiles:0, files_in_dir:[], numDirs:0 })
                 
                 chapters[chapterNum] = {
                     slug: pageListWithTitle[i].slug,
@@ -92,23 +108,20 @@ class Csystem
                     is_directory: numFiles > 1?true:false,
                   
                 }
-               
+
                 if(level === 0) numFiles--;
                 if (numFiles > 0) {
-
-                    if(level === 0) {
-                        // let removed = files_in_dir.reverse().pop()
-                        // files_in_dir.reverse()
-                    }
                     chapters[chapterNum].files = []
                     
                     let pageListWithTitleInner = []
                     for(let j in files_in_dir) {
+                        
                         let item = files_in_dir[j]
                         let itemNameParts = item.name.split('/')
                         let indexInner = item.index
-                        let pathinner = '/' + itemNameParts.slice((level+2)).join('/')
-
+                        let pathinner =  itemNameParts.slice(2)
+                        pathinner = '/' + pathinner.join('/')
+                        
                         let itemInner = {
                             path: pathinner,
                             index: item.index,
@@ -117,11 +130,15 @@ class Csystem
                         }
                         if(pathinner !== '/')
                             pageListWithTitleInner.push(itemInner)
+
+                        
                     }
-                    chapters[chapterNum].files = self.build_nested_pages_inner(pageListWithTitleInner, level+1, chapters[chapterNum].breadCrumbs).slice(1)
+                    // chapters[chapterNum].files = self.build_nested_pages_inner(pageListWithTitleInner, level+1, '/01.environment/docs.md' === filePath?true:false).slice(1)
+                    chapters[chapterNum].files = self.build_nested_pages_inner(pageListWithTitleInner, level+1, false).slice(1)
                     
                 } else chapters[chapterNum].is_index = true
-                
+            } else {
+                ; 
             }
             
         }
@@ -139,10 +156,6 @@ class Csystem
         let filesPath = files.map(function (file) {
             return file.replace(content_dir, '');
         });
-
-        // let originalFilesPath = [ ...filesPath ];
-
-        // generate list filePaths
 
         let urls = filesPath.map(function (file) {
             file =  file.replace('.md', '').replace('\\', '/');
@@ -168,6 +181,7 @@ class Csystem
         for(let i in urls)urls[i] = urls[i].replace(/\/[0-9]+\./g, '/').replace(/^[0-9]+\./g, '')
         
         let nestedPages = self.build_nested_pages(originalUrls, urls, content_dir)
+
         return {original:originalUrls, modified:urls, nestedPages}
     }
 

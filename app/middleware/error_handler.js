@@ -17,7 +17,7 @@ function handler (config) {
       loggedIn   : ((config.authentication || config.authentication_for_edit) ? req.session.loggedIn : false)
     });
 
-  };
+  };  
 }
 
 // Exports

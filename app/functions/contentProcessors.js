@@ -32,8 +32,12 @@ function cleanString (str, use_underscore) {
 function cleanObjectStrings (obj) {
   let cleanObj = {};
   for (let field in obj) {
-    if (obj.hasOwnProperty(field)) {
-      cleanObj[cleanString(field, true)] = ('' + obj[field]).trim();
+    if(typeof obj[field] === 'object') {
+      cleanObj[cleanString(field, true)] = cleanObjectStrings(obj[field])
+    }else {
+      if (obj.hasOwnProperty(field)) {
+        cleanObj[cleanString(field, true)] = ('' + obj[field]).trim();
+      }
     }
   }
   return cleanObj;
@@ -75,6 +79,7 @@ function processMeta (markdownContent) {
         metas = metaString.match(/(.*): (.*)/ig);
         metas.forEach(item => {
           const parts = item.split(': ');
+          console.log(parts)
           if (parts[0] && parts[1]) {
             meta[cleanString(parts[0], true)] = parts[1].trim();
           }
@@ -92,6 +97,8 @@ function processMeta (markdownContent) {
     default:
     // No meta information
   }
+
+  // console.log(meta)
 
   return meta;
 }

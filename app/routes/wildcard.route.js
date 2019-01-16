@@ -27,10 +27,10 @@ function route_wildcard (config, reffilePaths) {
     let pathIndex = filePaths.findIndex(function(elem){return elem === slug})
     slug = originalFilePaths[pathIndex]
     let navSlugs = {}
-    if(pathIndex === 0) navSlugs = {next:filePaths[pathIndex+1]}
+    if(pathIndex === 0) navSlugs = {next:encodeURI(filePaths[pathIndex+1])}
     else {
-      if(pathIndex === reffilePaths.length - 1)navSlugs = {prev:filePaths[pathIndex-1]}
-      else navSlugs = {prev:filePaths[pathIndex-1], next:filePaths[pathIndex+1]}
+      if(pathIndex === reffilePaths.length - 1)navSlugs = {prev:encodeURI(filePaths[pathIndex-1])}
+      else navSlugs = {prev:filePaths[pathIndex-1], next:encodeURI(filePaths[pathIndex+1])}
     }
     
     let file_path      = path.normalize(config.content_dir + slug);
@@ -50,6 +50,7 @@ function route_wildcard (config, reffilePaths) {
       }
       if (path.extname(file_path) === '.md') {
         let meta = contentProcessors.processMeta(content);
+        console.log(meta)
         meta.custom_title = meta.title;
         if (!meta.title) { meta.title = contentProcessors.slugToTitle(file_path); }
         // Content
@@ -86,6 +87,8 @@ function route_wildcard (config, reffilePaths) {
         }
         // let pageList = remove_image_content_directory(config, contentsHandler(slug, config));
         let pageList = nestedPages
+
+        // console.log(pageList)
 
         let loggedIn = ((config.authentication || config.authentication_for_edit) ? req.session.loggedIn : false);
 
@@ -185,10 +188,15 @@ function route_wildcard (config, reffilePaths) {
           return {retpages:pages, retmodified: modified, breadCrumbs}
         }
       
+        // console.log(meta)
         let retpageList = removeParent([...pageList])
         retpageList = getActive([...retpageList], slug, [...retpageList])
         let breadCrumbs = retpageList.breadCrumbs
         retpageList = retpageList.retpages
+        let tmp = {}
+        if(navSlugs.prev !== 'undefined' && navSlugs.prev !== undefined)tmp.prev = navSlugs.prev
+        if(navSlugs.next !== 'undefined' && navSlugs.next !== undefined) tmp.next = navSlugs.next
+        navSlugs = {... tmp}
         return res.render(render, {
           config        : config,
           pages         : retpageList,
