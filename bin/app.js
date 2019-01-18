@@ -2,6 +2,12 @@
 
 'use strict';
 
+
+
+const yargs = require("yargs");
+const argv = yargs.argv;
+console.log(argv);
+
 // Modules
 var debug = require('debug')('CSYCMS');
 
@@ -23,7 +29,7 @@ var config = require('../config/system.config.js')(__dirname);
 var app = csycms(config);
 
 // Load the HTTP Server
-console.log('listening     ')
+console.log(`Listening  on PORT ${app.get('port')}`)
 var server = app.listen(app.get('port'), function () {
   debug('Express HTTP server listening on port ' + server.address().port);
 });

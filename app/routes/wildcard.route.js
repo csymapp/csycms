@@ -197,7 +197,19 @@ function route_wildcard (config, reffilePaths) {
         if(navSlugs.prev !== 'undefined' && navSlugs.prev !== undefined)tmp.prev = navSlugs.prev
         if(navSlugs.next !== 'undefined' && navSlugs.next !== undefined) tmp.next = navSlugs.next
         navSlugs = {... tmp}
-        return res.render(render, {
+
+        let layout
+        , theme = config.theme_name
+        if(meta.theme) theme = meta.theme
+        if(meta.page)
+          render = path.join(theme, 'templates', meta.page)
+        else 
+          render = path.join(theme, 'templates', render) 
+        if(meta.layout)
+          layout = path.join(theme, 'templates', meta.layout)
+        else 
+          layout = path.join(theme, 'templates', 'layout')
+        return res.render( render, {
           config        : config,
           pages         : retpageList,
           meta          : meta,
@@ -209,7 +221,8 @@ function route_wildcard (config, reffilePaths) {
           username      : (config.authentication ? req.session.username : null),
           canEdit       : canEdit,
           navSlugs,
-          breadCrumbs
+          breadCrumbs,
+          layout
         });
       }
 

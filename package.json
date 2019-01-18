@@ -35,12 +35,12 @@
   "bin": "./bin/CSYCMS",
   "main": "./app/index.js",
   "scripts": {
-    "start": "DEBUG=CSYCMS node bin/app.js",
-    "dev": "DEBUG=CSYCMS nodemon bin/app.js",
-    "start_win": "set DEBUG=CSYCMS&&node example/server.js",
-    "test": "npm run lint && mocha --reporter spec test/*.js",
+    "start": "DEBUG=CSYCMS node bin/app.js $*",
+    "dev": "DEBUG=CSYCMS nodemon bin/app.js $*",
+    "start_win": "set DEBUG=CSYCMS&&node example/server.js $*",
+    "test": "npm run lint && mocha --reporter spec test/*.js $*",
     "gulp": "gulp",
-    "lint": "./node_modules/.bin/eslint bin/* app/**/*.js example/**/*.js test/*.js gulpfile.js"
+    "lint": "./node_modules/.bin/eslint bin/* app/**/*.js example/**/*.js test/*.js gulpfile.js $*"
   },
   "engines": {
     "node": ">=8.0.0"
@@ -81,7 +81,8 @@
     "sweetalert2": "7.29.1",
     "underscore": "1.9.1",
     "underscore.string": "3.3.5",
-    "validator": "10.9.0"
+    "validator": "10.9.0",
+    "yargs": "^12.0.5"
   },
   "devDependencies": {
     "always-tail": "0.2.0",

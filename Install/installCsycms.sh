@@ -41,6 +41,12 @@ askYesNoQuestion() {
     esac
 }
 
+readConfig () {
+    set -a
+    source .env
+    set +a
+}
+
 main() {
     setUpDir=$(pwd)
     echo "Hello there. Greetings from Mr. Brian"
@@ -66,11 +72,7 @@ main() {
     sudo cp -r lib/ /
     cd ..
     
-    tput bold;  echo "Mr. Brian: I am copying config files."; tput sgr0
-    cd config
-    cp system.config.example system.config.js
-    askYesNoQuestion "Would you like to edit system config now? y/n" editFile? "system.config.js"
-    cd ..
+    
     
     # tput bold;  echo "Mr. Brian: I am copying content files."; tput sgr0
     # cp -r content.example content
@@ -91,6 +93,39 @@ main() {
 
         askYesNoQuestion "Have you finished setting up the ssh keys? y/n" pass
     }
+
+    #default themes
+    tput bold;  echo "Mr. Brian: I am Setting Up default themes for you"; tput sgr0
+    sudo cp -r themes.bac themes
+
+    readConfig
+
+    # Docs content
+    tput bold;  echo "Mr. Brian: I am Setting Up docs for you"; tput sgr0
+    sudo mkdir -p content
+    cd content
+    sudo git clone $SITEREPO .
+    cd ..
+    
+    # Docs content
+    tput bold;  echo "Mr. Brian: I am Setting Up docs for you"; tput sgr0
+    sudo mkdir -p content/csycmsdocs
+    cd content/csycmsdocs
+    sudo git clone $CSYCMSDOCSREPO .
+    cd ../..
+
+    # Public
+    tput bold;  echo "Mr. Brian: I am Setting Public folders for you"; tput sgr0
+    sudo cp -r content/csycmsdocs/public ./
+
+
+
+    # 
+    tput bold;  echo "Mr. Brian: I am copying config files."; tput sgr0
+    cd config
+    cp system.config.example system.config.js
+    askYesNoQuestion "Would you like to edit system config now? y/n" editFile? "system.config.js"
+    cd ..
 
     
     tput bold;  echo "Mr. Brian: I am now trying to start the service."; tput sgr0

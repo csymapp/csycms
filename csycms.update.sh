@@ -1,10 +1,7 @@
 #!/bin/bash
 
-readConfig () {
-    set -a
-    source .env
-    set +a
-}
+# import
+. src/functions.sh
 
 readConfig
 
@@ -49,6 +46,7 @@ do
         cd content/csycmsdocs
         sudo git pull origin master
         GITCSYCMSDOCS=$(git log|head)
+        cp -r content/csycmsdocs/public/* themes/
         
         GITOLDSITE="$(echo $GITSITE | cut -d' ' -f2)"
         GITNEWSITE="$(echo $GIT | cut -d' ' -f2)"

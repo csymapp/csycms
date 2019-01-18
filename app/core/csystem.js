@@ -150,7 +150,8 @@ class Csystem
         let self = this
         let files = self.listFiles(content_dir);
         files = _.filter(files, function (file) {
-            return file.substr(-3) === '.md';
+            // remove also public folder from csycms docs
+            return file.substr(-3) === '.md' && ! file.includes('/csycmsdocs/public');
         });
 
         let filesPath = files.map(function (file) {

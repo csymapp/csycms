@@ -6,6 +6,9 @@ system.config.js
 content/
 content.bac/
 example/
+themes/
+public/
+config/
 
 # Logs
 logs
