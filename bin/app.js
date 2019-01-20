@@ -4,32 +4,31 @@
 
 
 
-const yargs = require("yargs");
-const argv = yargs.argv;
-console.log(argv);
+const yargs = require("yargs")
+, argv = yargs.argv
+, site = argv.SITE
 
 // Modules
-var debug = require('debug')('CSYCMS');
+let debug = require('debug')('CSYCMS');
 
 // Here is where we load csycms.
 // When you are in your own project repository,
 // csycms should be installed via NPM and loaded as:
-// var csycms = require('csycms');
+// let csycms = require('csycms');
 //
 // For development purposes, we load it this way in this example:
-var csycms = require('../app/index.js');
+let csycms = require('../app/index.js');
 
 // Then, we load our configuration file
 // This can be done inline, with a JSON file,
 // or with a Node.js module as we do below.
-var config = require('../config/system.config.js')(__dirname);
+let config = require(`../config/${site}/system.config.js`)(__dirname);
 
 // Finally, we initialize csycms
 // with our configuration object
-var app = csycms(config);
+let app = csycms(config);
 
 // Load the HTTP Server
-console.log(`Listening  on PORT ${app.get('port')}`)
-var server = app.listen(app.get('port'), function () {
-  debug('Express HTTP server listening on port ' + server.address().port);
+let server = app.listen(app.get('port'), function () {
+  console.log('Express HTTP server listening on port ' + server.address().port);
 });

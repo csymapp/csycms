@@ -4,6 +4,9 @@ const fse           = require('fs-extra')
 , path              = require('path')
 , _                 = require('underscore')
 , contentProcessors = require('../functions/contentProcessors')
+, yargs = require("yargs")
+, argv = yargs.argv
+, site = argv.SITE
 
 class Csystem
 {
@@ -149,6 +152,7 @@ class Csystem
     loadPagesList(content_dir) {
         let self = this
         let files = self.listFiles(content_dir);
+        // console.log(`=============================${content_dir}`)
         files = _.filter(files, function (file) {
             // remove also public folder from csycms docs
             return file.substr(-3) === '.md' && ! file.includes('/csycmsdocs/public');

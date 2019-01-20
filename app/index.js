@@ -17,6 +17,7 @@ const
   , csystem = require(__dirname + '/core/csystem')
   , yargs = require("yargs")
   , argv = yargs.argv
+  , site = argv.SITE
 
 function initialize(config) {
   dotenv.config()
@@ -26,12 +27,13 @@ function initialize(config) {
     config.lang = require('./translations/' + config.locale + '.json');
   }
 
-  // Content_Dir requires trailing slash
-  let pageList = csystem.loadPagesList(config.content_dir)
-  // load contents of config_dir
+  
+
 
   if (config.content_dir[config.content_dir.length - 1] !== path.sep) { config.content_dir += path.sep; }
-
+  config.content_dir += site
+  // Content_Dir requires trailing slash
+  let pageList = csystem.loadPagesList(config.content_dir)
   // Load Files
   var authenticate = require('./middleware/authenticate.js')(config, pageList);
   var always_authenticate = require('./middleware/always_authenticate.js')(config, pageList);
@@ -64,7 +66,10 @@ function initialize(config) {
   if (!config.theme_dir) { config.theme_dir = path.join(__dirname, '..', 'themes'); }
   if (!config.theme_name) { config.theme_name = 'default'; }
   // if (!config.public_dir) { config.public_dir = path.join(__dirname, '..', 'public', config.theme_name, 'publice'); }
-  config.public_dir = path.join(__dirname, '..', 'public', config.theme_name, 'public');
+  // config.public_dir = path.join(__dirname, '..', 'public', config.theme_name, 'public');
+
+  console.log(`DIR: ${config.public_dir}`)
+
   app.set('views', path.join(__dirname, '..', 'themes'));
   app.set('view options', { layout: path.join(__dirname, '..', 'themes', config.theme_name, 'templates') });
   console.log(path.join(__dirname, '..', 'themes', config.theme_name, 'templates'))
@@ -87,7 +92,12 @@ function initialize(config) {
   app.engine('html', hogan);
 
   // Setup Express
-  app.use(favicon(path.join(__dirname, '..', 'public', '/icon.png')));
+  let iconPath = path.join(config.public_dir, 'sites', site, '/icon.png')
+  if (fse.existsSync(iconPath)) {
+    app.use(favicon(iconPath));
+  } else
+  app.use(favicon(path.join(config.public_dir, '/icon.png'))); 
+  // app.use(favicon(path.join(__dirname, '..', 'public', '/icon.png')));   # 
   app.use(logger('dev'));
   app.use(body_parser.json());
   app.use(body_parser.urlencoded({ extended: false }));

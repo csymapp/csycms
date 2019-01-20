@@ -1,10 +1,6 @@
 #!/bin/bash
 
 # git pull origin master
-
-# ./csycms.update.sh &
-# UPDATE_PROC_ID=$!
-
 # npm install
 
 # import
@@ -34,16 +30,28 @@ stopChildren() {
     done
 }
 
+setUpThemes
+
 index=0;
 for i in "${SITES_[@]}"; do
     monitors $i $index &
     PROC_ID_A=$!
     PROCESS_IDS[$index]=$PROC_ID_A
     let "index++"
+    
+    # updates $i $index &
+    # PROC_ID_A=$!
+    # PROCESS_IDS[$index]=$PROC_ID_A
+    # let "index++"
+
 done
 
+csystemUpdates &
+PROC_ID_UPDATE=$!
+PROCESS_IDS[$index]=$PROC_ID_UPDATE
+
+
 printf '%s|' "${PROCESS_IDS[@]}"
-echo ""
 
 # If this script is killed, stop the children.
 trap "stopChildren" EXIT

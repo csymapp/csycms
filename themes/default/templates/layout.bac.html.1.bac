@@ -14,12 +14,12 @@
   <!-- Our Custom CSS -->
   <!-- <link rel="stylesheet" href="{{config.base_url}}/styles/style.css"> -->
   <link rel="stylesheet" href="{{config.base_url}}/styles/uf_style.css">
-  <!-- <link rel="stylesheet" href="{{config.base_url}}/styles/CSYCMS.css"> -->
+  <!-- <link rel="stylesheet" href="{{config.base_url}}/styles/raneto.css"> -->
   <link rel="stylesheet" href="{{config.base_url}}/styles/cstyle.css"> 
   <!-- <link rel="stylesheet" href="{{config.base_url}}/styles/ghostdown.css"> -->
   {{#config.rtl_layout}}
   <link rel="stylesheet" href="{{config.base_url}}/lib/bootstrap-rtl/dist/css/bootstrap-rtl.min.css">
-  <link rel="stylesheet" href="{{config.base_url}}/styles/CSYCMS.rtl.css">
+  <link rel="stylesheet" href="{{config.base_url}}/styles/raneto.rtl.css">
   
   {{/config.rtl_layout}}
 
@@ -397,7 +397,7 @@
   <script src="{{config.base_url}}/lib/fitvids/fitvids.min.js"></script>
   <script src="{{config.base_url}}/lib/masonry-layout/dist/masonry.pkgd.min.js"></script>
   <script src="{{config.base_url}}/scripts/ghostdown.js"></script>
-  <script src="{{config.base_url}}/scripts/CSYCMS.js"></script>
+  <script src="{{config.base_url}}/scripts/raneto.js"></script>
   <script src="{{config.base_url}}/scripts/uf.js"></script>
 
     <!-- jQuery CDN - Slim version (=without AJAX) -->

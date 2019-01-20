@@ -5,56 +5,149 @@ readConfig () {
 }
 
 # CHILD_PROCESS_IDS=()
+setUpThemes () {
+    readConfig
+    
+    mkdir -p themes
+    cd themes
+    {
+        git clone $THEMESREPO .
+    } || git pull origin master
+    # copy themes public dirs to public
+    mkdir ../public/themes
+    for d in */ ; do
+        mkdir -p "../public/themes/$d/"
+        cp -r "$d"public/* "../public/themes/$d"
+        echo "$d"public/* "../public/themes/$d"
+    done
+    cd ..
+}
+
+csystemUpdates () {
+    checktime=$(($UPDATEINTERVAL * 60))
+    # create some offset of 120 seconds
+    sleep $(($2 * 60))
+    while : 
+    do
+        {
+            GITOLD=$(git log|head)
+            git pull origin master
+            GITNEW=$(git log|head)
+
+            cd themes/
+            GITOLDTHEME=$(git log|head)
+            git pull origin master
+            GITNEWTHEME=$(git log|head)
+
+            cd ..
+            
+            [ "$GITOLD" == "$GITNEW" ] || systemctl restart csycms.service # restart individual sub process
+            [ "$GITOLDTHEME" == "$GITNEWTHEME" ] || systemctl restart csycms.service # restart individual sub process
+            sleep $checktime
+        }
+    done
+}
+
+siteUpdates () {
+    checktime=$(($UPDATEINTERVAL * 60))
+    CONFIG=$1
+    index=$2
+    SITE=$(echo $CONFIG | cut -d \| -f 1)
+    PORT=$(echo $CONFIG | cut -d \| -f 2)
+    SITEREPO=$(echo $CONFIG | cut -d \| -f 3)
+    
+    cd "content/$SITE"
+    while : 
+    do
+        {
+            GITSITEOLD=$(git log|head)
+            git pull origin master
+            GITSITENEW=$(git log|head)
+
+            cd csycmsdocs
+            GITCSYCMSDOCSOLD=$(git log|head)
+            git pull origin master
+            GITCSYCMSDOCSNEW=$(git log|head)
+
+            cd ..
+            
+            [ "$GITCSYCMSDOCSOLD" == "$GITSITENEW" ] || kill $3 # restart ndividual sub process
+            [ "$GITSITEOLD" == "$GITCSYCMSDOCSNEW" ] || kill $3 # restart ndividual sub process
+            sleep $checktime
+        }
+    done
+}
+
+
+
 setUpSite () {
     readConfig
+    pwd
+    mkdir -p config
+    cp -r config.example/* config/
+    
     mkdir -p "content/$1"
     mkdir -p "config/$1"
-    mkdir -p "public/$1"
-
+    mkdir -p "public/sites/$1"
+    
+    
     cd "content/$1"
-    git clone $2 .
-    git pull origin master
-
+    {
+        git clone $2 . && cp ../../config/system.config.example "../../config/$1/system.config.js"
+    } || git pull origin master
+    
     cd ../..
-
-    cp -r "content/$1/public/content" "content/$1"
-    cp -r "content/$1/public/config" "config/$1"
-    cp -r "content/$1/public/public" "public/$1"
-
+    {
+        # cp -r "content/$1/public/content" "content/$1"
+        cp -r "content/$1/public/config" "config/$1"
+        cp -r "content/$1/public/public" "public/sites/$1"
+    } || echo -n""
+    
     cd "content/$1"
     mkdir -p csycmsdocs
     cd csycmsdocs
-    git clone $CSYCMSDOCSREPO .
-    git pull origin master
-
+    {
+        git clone $CSYCMSDOCSREPO .
+    } ||     git pull origin master
+    
     cd ../../..
-
-    mkdir -p themes
-    cd themes
-    git clone $THEMESREPO .  
-    git pull origin master  
     
 }
 
-setUpSites () {
-
+stopOtherChildren () {
+    if [[ "" !=  "$1" ]]; then
+    kill -9 $1
+    fi
+    
+    if [[ "" !=  "$2" ]]; then
+    kill -9 $2
+    fi
+    
 }
 
 monitors () {
+    set -o monitor # for SIGCHLD
     CONFIG=$1
     index=$2
-    SITE=$(echo $i | cut -d: -f 1)
-    PORT=$(echo $i | cut -d: -f 2)
-
-    setUpSite $SITE
-
-    PORT=$PORT node bin/app.js &
+    SITE=$(echo $CONFIG | cut -d \| -f 1)
+    PORT=$(echo $CONFIG | cut -d \| -f 2)
+    SITEREPO=$(echo $CONFIG | cut -d \| -f 3)
+    
+    setUpSite $SITE $SITEREPO
+    
+    PORT=$PORT SITE=$SITE node bin/app.js --SITE=$SITE &
     PROC_ID=$!
-    echo "$SITE: $PORT: $PROC_ID"
-    # CHILD_PROCESS_IDS[$index]=$PROC_ID
+    
+    siteUpdates $1 $2 $PROC_ID &
+    UPDATE_PROC_ID=$!
 
-    trap "kill $PROC_ID && echo stopping $PROC_ID" EXIT
+    echo "$SITE: $PORT: $PROC_ID: $UPDATE_PROC_ID"
+    
+    trap "stopOtherChildren $PROC_ID $UPDATE_PROC_ID && echo stopping $PROC_ID and $UPDATE_PROC_ID" EXIT
+    trap "stopOtherChildren $PROC_ID $UPDATE_PROC_ID && echo stopping $PROC_ID and $UPDATE_PROC_ID" SIGCHLD
+
     wait
+    
     monitors $CONFIG $index
     
 }
