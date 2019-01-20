@@ -4,10 +4,10 @@ todo
 .env
 system.config.js
 content/
-content.bac
+content.bac/
 config/
 example/
-themes
+themes/
 public/themes
 public/sites
 config/
