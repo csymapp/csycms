@@ -56,9 +56,7 @@ async function handler (query, config) {
     const p = pageHandler(contentDir + result.ref, config);
     // p.excerpt = p.excerpt.replace(new RegExp('(' + query + ')', 'gim'), '<span class="search-query">$1</span>');
     p.excerpt = p.excerpt.replace(new RegExp('(' + query + ')', 'gim'), '<mark class="highlight">$1</mark>');
-    console.log("===============================")
     if(config.domain) p.Oslug = `http://${config.domain}${p.slug}`
-    console.log(p.Oslug)
     searchResults.push(p);
   });
 
