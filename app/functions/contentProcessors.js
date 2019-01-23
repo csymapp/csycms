@@ -119,7 +119,7 @@ function processVars (markdownContent, config) {
   return markdownContent;
 }
 
-function extractDocument (contentDir, filePath, debug) {
+function extractDocument (contentDir, filePath, debug, domain=null) {
   try {
     const file = fs.readFileSync(filePath);
     const meta = processMeta(file.toString('utf-8'));
@@ -128,7 +128,10 @@ function extractDocument (contentDir, filePath, debug) {
     const title = meta.title ? meta.title : slugToTitle(id);
     const body  = file.toString('utf-8');
 
-    return { id, title, body }
+    let ret = { id, title, body }
+
+    if(domain)ret['domain'] = domain
+    return ret
   } catch (e) {
     if (debug) {
       console.log(e);

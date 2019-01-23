@@ -17,7 +17,7 @@ const
   , csystem = require(__dirname + '/core/csystem')
   , yargs = require("yargs")
   , argv = yargs.argv
-  , site = argv.SITE
+  , site = argv.SITE  || process.env.SITE
 
 function initialize(config) {
   dotenv.config()
@@ -33,7 +33,7 @@ function initialize(config) {
   if (config.content_dir[config.content_dir.length - 1] !== path.sep) { config.content_dir += path.sep; }
   config.content_dir += site
   // Content_Dir requires trailing slash
-  let pageList = csystem.loadPagesList(config.content_dir)
+  let pageList = csystem.loadPagesList(config.content_dir, config)
   // Load Files
   var authenticate = require('./middleware/authenticate.js')(config, pageList);
   var always_authenticate = require('./middleware/always_authenticate.js')(config, pageList);
@@ -68,7 +68,7 @@ function initialize(config) {
   // if (!config.public_dir) { config.public_dir = path.join(__dirname, '..', 'public', config.theme_name, 'publice'); }
   // config.public_dir = path.join(__dirname, '..', 'public', config.theme_name, 'public');
 
-  console.log(`DIR: ${config.public_dir}`)
+  // console.log(`DIR: ${config.public_dir}`)
 
   app.set('views', path.join(__dirname, '..', 'themes'));
   app.set('view options', { layout: path.join(__dirname, '..', 'themes', config.theme_name, 'templates') });

@@ -6,7 +6,7 @@
 
 const yargs = require("yargs")
 , argv = yargs.argv
-, site = argv.SITE
+, site = argv.SITE || process.env.SITE
 
 // Modules
 let debug = require('debug')('CSYCMS');

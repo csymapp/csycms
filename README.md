@@ -129,5 +129,6 @@ See [LICENSE](LICENSE.txt)
 # Todo
 - [ ] Authentication
 - [x] Generating meta data
+- [ ] Nginx configuration
 
 **[⬆ back home](#table-of-contents)**

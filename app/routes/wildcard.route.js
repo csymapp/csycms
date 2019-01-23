@@ -50,7 +50,6 @@ function route_wildcard (config, reffilePaths) {
       }
       if (path.extname(file_path) === '.md') {
         let meta = contentProcessors.processMeta(content);
-        console.log(meta)
         meta.custom_title = meta.title;
         if (!meta.title) { meta.title = contentProcessors.slugToTitle(file_path); }
         // Content

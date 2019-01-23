@@ -6,7 +6,7 @@ const fse           = require('fs-extra')
 , contentProcessors = require('../functions/contentProcessors')
 , yargs = require("yargs")
 , argv = yargs.argv
-, site = argv.SITE
+, site = argv.SITE  || process.env.SITE
 
 class Csystem
 {
@@ -149,7 +149,7 @@ class Csystem
     }
 
     
-    loadPagesList(content_dir) {
+    loadPagesList(content_dir, config) {
         let self = this
         let files = self.listFiles(content_dir);
         // console.log(`=============================${content_dir}`)
@@ -186,8 +186,22 @@ class Csystem
         for(let i in urls)urls[i] = urls[i].replace(/\/[0-9]+\./g, '/').replace(/^[0-9]+\./g, '')
         
         let nestedPages = self.build_nested_pages(originalUrls, urls, content_dir)
-
-        return {original:originalUrls, modified:urls, nestedPages}
+        let siteSpace = config.site_space
+        let dir = 'config'
+        let otherSites = fse.readdirSync(dir).reduce(function (list, file) {
+            var name = path.join(dir, file);
+            var isDir = fse.statSync(name).isDirectory();
+            return list.concat(isDir ? self.listFiles(name) : [name]);
+          }, []).reduce((accumulator, currentValue, currentIndex, originalPageListArray) => {
+            let rootPath = path.join(__dirname, '..', '..', 'bin')
+            , config_file = path.join(__dirname,'..', '..',  currentValue)
+            , iConfig = require(config_file)(rootPath)
+            , content_dir = path.join(iConfig.content_dir, iConfig.site)
+            siteSpace === iConfig.site_space? accumulator.push({domain: iConfig.domain, content_dir, config_file }):false;
+            return accumulator
+    }, [] )
+        //   console.log(otherSites)
+        return {original:originalUrls, modified:urls, nestedPages, otherSites}
     }
 
 	

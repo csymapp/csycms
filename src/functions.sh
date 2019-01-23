@@ -55,6 +55,7 @@ siteUpdates () {
     SITE=$(echo $CONFIG | cut -d \| -f 1)
     PORT=$(echo $CONFIG | cut -d \| -f 2)
     SITEREPO=$(echo $CONFIG | cut -d \| -f 3)
+    DOMAIN=$(echo $CONFIG | cut -d \| -f 4)
     
     cd "content/$SITE"
     while : 
@@ -132,10 +133,11 @@ monitors () {
     SITE=$(echo $CONFIG | cut -d \| -f 1)
     PORT=$(echo $CONFIG | cut -d \| -f 2)
     SITEREPO=$(echo $CONFIG | cut -d \| -f 3)
+    DOMAIN=$(echo $CONFIG | cut -d \| -f 4)
     
     setUpSite $SITE $SITEREPO
     
-    PORT=$PORT SITE=$SITE node bin/app.js --SITE=$SITE &
+    PORT=$PORT SITE=$SITE DOMAIN=$DOMAIN node bin/app.js --SITE=$SITE &
     PROC_ID=$!
     
     siteUpdates $1 $2 $PROC_ID &

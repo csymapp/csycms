@@ -56,20 +56,20 @@ main() {
     tput bold;  echo "Mr. Brian: I am now setting up system defaults for you with your root user."; tput sgr0
     tput bold;  echo "Mr. Brian: I am cloning into /var/www/html."; tput sgr0
     
-    sudo mkdir -p /var/www/html
+    mkdir -p /var/www/html
     cd /var/www/html
-    sudo git clone https://github.com/csymapp/csycms.git
+    git clone https://github.com/csymapp/csycms.git
     cd csycms
     
     tput bold;  echo "Mr. Brian: I am checking for updates."; tput sgr0
-    sudo git pull origin master
+    git pull origin master
     
     tput bold;  echo "Mr. Brian: I am installing node modules."; tput sgr0
-    sudo npm install
+    npm install
     
     tput bold;  echo "Mr. Brian: I am copying service files."; tput sgr0
     cd Install
-    sudo cp -r lib/ /
+    cp -r lib/ /
     cd ..
     
     
@@ -95,39 +95,39 @@ main() {
     }
 
     #default themes
-    tput bold;  echo "Mr. Brian: I am Setting Up default themes for you"; tput sgr0
-    sudo cp -r themes.bac themes
+    # tput bold;  echo "Mr. Brian: I am Setting Up default themes for you"; tput sgr0
+    # sudo cp -r themes.bac themes
 
     readConfig
 
     # Docs content
-    tput bold;  echo "Mr. Brian: I am Setting Up docs for you"; tput sgr0
-    sudo mkdir -p content
-    cd content
-    sudo git clone $SITEREPO .
-    cd ..
+    # tput bold;  echo "Mr. Brian: I am Setting Up docs for you"; tput sgr0
+    # sudo mkdir -p content
+    # cd content
+    # sudo git clone $SITEREPO .
+    # cd ..
     
-    # Docs content
-    tput bold;  echo "Mr. Brian: I am Setting Up docs for you"; tput sgr0
-    sudo mkdir -p content/csycmsdocs
-    cd content/csycmsdocs
-    sudo git clone $CSYCMSDOCSREPO .
-    cd ../..
+    # # Docs content
+    # tput bold;  echo "Mr. Brian: I am Setting Up docs for you"; tput sgr0
+    # sudo mkdir -p content/csycmsdocs
+    # cd content/csycmsdocs
+    # sudo git clone $CSYCMSDOCSREPO .
+    # cd ../..
 
-    # Public
-    tput bold;  echo "Mr. Brian: I am Setting Public folders for you"; tput sgr0
-    sudo cp -r content/csycmsdocs/public ./
+    # # Public
+    # tput bold;  echo "Mr. Brian: I am Setting Public folders for you"; tput sgr0
+    # sudo cp -r content/csycmsdocs/public ./
 
 
 
-    # 
-    tput bold;  echo "Mr. Brian: I am copying config files."; tput sgr0
-    cd config
-    cp system.config.example system.config.js
-    askYesNoQuestion "Would you like to edit system config now? y/n" editFile? "system.config.js"
-    cd ..
-
+    # # 
+    # tput bold;  echo "Mr. Brian: I am copying config files."; tput sgr0
+    # cd config
+    # cp system.config.example system.config.js
+    # askYesNoQuestion "Would you like to edit system config now? y/n" editFile? "system.config.js"
+    # cd ..
     
+    tput bold;  echo "Mr. Brian: I am now going through configuration files."; tput sgr0
     tput bold;  echo "Mr. Brian: I am now trying to start the service."; tput sgr0
     sudo systemctl daemon-reload
     sudo systemctl enable csycms.service

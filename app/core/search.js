@@ -30,12 +30,13 @@ function getStemmers (config) {
   return stemmers;
 }
 
-function handler (query, config) {
+async function handler (query, config) {
   const contentDir = utils.normalizeDir(path.normalize(config.content_dir));
+  
   const documents = glob
-    .sync(contentDir + '**/*.md')
+    .sync(contentDir + '/**/*.md')
     .map(filePath => contentProcessors.extractDocument(
-      contentDir, filePath, config.debug
+      contentDir, filePath, config.debug, config.domain||null
     ))
     .filter(doc => doc !== null);
 
@@ -55,6 +56,9 @@ function handler (query, config) {
     const p = pageHandler(contentDir + result.ref, config);
     // p.excerpt = p.excerpt.replace(new RegExp('(' + query + ')', 'gim'), '<span class="search-query">$1</span>');
     p.excerpt = p.excerpt.replace(new RegExp('(' + query + ')', 'gim'), '<mark class="highlight">$1</mark>');
+    console.log("===============================")
+    if(config.domain) p.Oslug = `http://${config.domain}${p.slug}`
+    console.log(p.Oslug)
     searchResults.push(p);
   });
 

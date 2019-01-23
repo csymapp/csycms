@@ -13,7 +13,11 @@ module.exports = function (ROOTPATH) {
   var config = {
 
     // Your site title (format: page_title - site_title)
+    site_space: 'CSECO',
+    
     site_title: 'CSYMS Docs',
+
+    search_scope: 'global',
 
     // The base URL of your site (can use %base_url% in Markdown files)
     base_url: '',
@@ -121,6 +125,10 @@ module.exports = function (ROOTPATH) {
     // ]
 
     table_of_contents: false
+    // where is this site accessible?
+    , domain: 'docs.vipimo.com'
+    // same as that in .env
+    , site: 'vipimodocs'
 
   };
   config.public_dir = path.join(ROOTPATH, '..', 'themes', config.theme_name, 'public');
