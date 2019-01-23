@@ -129,6 +129,7 @@ See [LICENSE](LICENSE.txt)
 # Todo
 - [ ] Authentication
 - [x] Generating meta data
+- [ ] Replace lunr with elasticlunr
 - [ ] Nginx configuration
 
 **[⬆ back home](#table-of-contents)**

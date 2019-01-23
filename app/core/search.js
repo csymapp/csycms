@@ -50,6 +50,7 @@ async function handler (query, config) {
   });
 
   const results       = idx.search(query);
+  
   const searchResults = [];
 
   results.forEach(result => {
