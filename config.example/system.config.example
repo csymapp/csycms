@@ -2,9 +2,10 @@
 'use strict';
 
 // Modules
-var path = require('path');
-
-
+var path = require('path')
+, yargs = require("yargs")
+, argv = yargs.argv
+, site = argv.SITE
 
 // Exports
 module.exports = function (ROOTPATH) {
@@ -14,10 +15,10 @@ module.exports = function (ROOTPATH) {
 
     // Your site title (format: page_title - site_title)
     site_space: 'CSECO',
-    
-    site_title: 'CSYMS Docs',
 
-    search_scope: 'global',
+    site_title: 'CSECO',
+
+    search_scope: 'local',
 
     // The base URL of your site (can use %base_url% in Markdown files)
     base_url: '',
@@ -53,7 +54,8 @@ module.exports = function (ROOTPATH) {
     content_dir: path.join(ROOTPATH, '..', 'content'),
 
     // Where is the public directory or document root?
-    public_dir: path.join(ROOTPATH, '..', 'themes', 'default', 'public'),
+    // public_dir: path.join(ROOTPATH, '..', 'themes', 'default', 'public'),
+    public_dir: path.join(ROOTPATH, '..', 'public'),
 
     // The base URL of your images folder,
     // Relative to config.public_dir
@@ -126,12 +128,13 @@ module.exports = function (ROOTPATH) {
 
     table_of_contents: false
     // where is this site accessible?
-    , domain: 'docs.vipimo.com'
+    // , domain: 'www.cseco.co.ke'
+    , domain: 'localhost:3001'
     // same as that in .env
-    , site: 'vipimodocs'
+    , site: 'cseco'
 
   };
-  config.public_dir = path.join(ROOTPATH, '..', 'themes', config.theme_name, 'public');
+  // config.public_dir = path.join(ROOTPATH, '..', 'themes', config.theme_name, 'public');
 
   return config;
 }
