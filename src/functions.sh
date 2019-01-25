@@ -26,7 +26,7 @@ setUpThemes () {
 csystemUpdates () {
     checktime=$(($UPDATEINTERVAL * 60))
     # create some offset of 120 seconds
-    sleep $(($2 * 60))
+    sleep $((2 * 60))
     while : 
     do
         {
@@ -41,8 +41,8 @@ csystemUpdates () {
 
             cd ..
             
-            [ "$GITOLD" == "$GITNEW" ] || systemctl restart csycms.service # restart individual sub process
-            [ "$GITOLDTHEME" == "$GITNEWTHEME" ] || systemctl restart csycms.service # restart individual sub process
+            [ "$GITOLD" == "$GITNEW" ] || systemctl restart csycms.service 
+            [ "$GITOLDTHEME" == "$GITNEWTHEME" ] || systemctl restart csycms.service 
             sleep $checktime
         }
     done
