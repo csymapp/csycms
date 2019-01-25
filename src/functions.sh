@@ -137,10 +137,10 @@ monitors () {
     
     setUpSite $SITE $SITEREPO
 
-    echo "PORT=$PORT SITE=$SITE DOMAIN=$DOMAIN node bin/app.js --SITE=$SITE &"
+    echo "PORT=$PORT SITE=$SITE node bin/app.js --SITE=$SITE &"
 
     
-    PORT=$PORT SITE=$SITE DOMAIN=$DOMAIN node bin/app.js --SITE=$SITE &
+    PORT=$PORT SITE=$SITE  node bin/app.js --SITE=$SITE &
     PROC_ID=$!
     
     siteUpdates $1 $2 $PROC_ID &
