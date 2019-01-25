@@ -7,11 +7,36 @@ let fs                             = require('fs');
 let build_nested_pages             = require('../functions/build_nested_pages.js');
 let marked                         = require('marked');
 let toc                            = require('markdown-toc');
-let remove_image_content_directory = require('../functions/remove_image_content_directory.js');
+let remove_image_content_directory = require('../functions/remove_image_content_directory.js')
+, showdown                         = require('showdown')
+, converter                        = new showdown.Converter()
+, MarkdownIt                       = require('markdown-it')
+, md                               = new MarkdownIt({
+  html: true
+})
+, markdownItAttrs                   = require('markdown-it-attrs');
+ 
 
 const contentProcessors = require('../functions/contentProcessors');
 const contentsHandler = require('../core/contents');
 const utils = require('../core/utils');
+
+// import markdownItMermaid from 'markdown-it-mermaid'
+const markdownItMermaid = require('markdown-it-mermaid')
+
+
+// console.log(markdownItMermaid)
+// process.exit()
+md.use(markdownItAttrs);
+md.use(require('markdown-it-imsize'))
+md.use(require('markdown-it-checkbox'));
+md.use(require('markdown-it-math'));
+md.use(require('markdown-it-fontawesome'));
+md.use(require('markdown-it-decorate'));
+md.use(require('markdown-it-div'));
+// md.use(markdownItMermaid);
+// md.use(require('markdown-it-vue'));
+// md.use(require('markdown-it-container'), '[ui-tabs]');
 
 function route_wildcard (config, reffilePaths) {
   return function (req, res, next) {
@@ -27,10 +52,13 @@ function route_wildcard (config, reffilePaths) {
     let pathIndex = filePaths.findIndex(function(elem){return elem === slug})
     slug = originalFilePaths[pathIndex]
     let navSlugs = {}
-    if(pathIndex === 0) navSlugs = {next:encodeURI(filePaths[pathIndex+1])}
+    // if(pathIndex === 0) navSlugs = {next:encodeURI(filePaths[pathIndex+1])}
+    if(pathIndex === 0) navSlugs = {next:filePaths[pathIndex+1]}
     else {
-      if(pathIndex === reffilePaths.length - 1)navSlugs = {prev:encodeURI(filePaths[pathIndex-1])}
-      else navSlugs = {prev:filePaths[pathIndex-1], next:encodeURI(filePaths[pathIndex+1])}
+      // if(pathIndex === reffilePaths.length - 1)navSlugs = {prev:encodeURI(filePaths[pathIndex-1])}
+      if(pathIndex === reffilePaths.length - 1)navSlugs = {prev:(filePaths[pathIndex-1])}
+      // else navSlugs = {prev:filePaths[pathIndex-1], next:encodeURI(filePaths[pathIndex+1])}
+      else navSlugs = {prev:filePaths[pathIndex-1], next:(filePaths[pathIndex+1])}
     }
     
     let file_path      = path.normalize(config.content_dir + slug);
@@ -81,7 +109,7 @@ function route_wildcard (config, reffilePaths) {
           marked.setOptions({
             langPrefix : ''
           });
-          content = marked(content);
+          content = md.render(content)
 
         }
         // let pageList = remove_image_content_directory(config, contentsHandler(slug, config));
@@ -193,8 +221,8 @@ function route_wildcard (config, reffilePaths) {
         let breadCrumbs = retpageList.breadCrumbs
         retpageList = retpageList.retpages
         let tmp = {}
-        if(navSlugs.prev !== 'undefined' && navSlugs.prev !== undefined)tmp.prev = navSlugs.prev
-        if(navSlugs.next !== 'undefined' && navSlugs.next !== undefined) tmp.next = navSlugs.next
+        if(navSlugs.prev !== 'undefined' && navSlugs.prev !== undefined)tmp.prev = encodeURI( navSlugs.prev)
+        if(navSlugs.next !== 'undefined' && navSlugs.next !== undefined) tmp.next = encodeURI( navSlugs.next)
         navSlugs = {... tmp}
 
         let layout
@@ -208,7 +236,18 @@ function route_wildcard (config, reffilePaths) {
           layout = path.join(theme, 'templates', meta.layout)
         else 
           layout = path.join(theme, 'templates', 'layout')
-        return res.render( render, {
+        if(meta.redirect) {
+          let redirectPath = meta.redirect
+          let resCode =  redirectPath.match(/\[(.*?)\]/);
+          
+          if(!resCode) res.redirect(redirectPath)
+          else {
+            redirectPath = redirectPath.replace(resCode[0], '')
+            res.redirect(redirectPath, resCode[1])
+          }
+        }
+        if(!meta.response_code)meta.response_code = 200
+        return res.status(meta.response_code).render( render, {
           config        : config,
           pages         : retpageList,
           meta          : meta,
