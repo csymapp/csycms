@@ -72,8 +72,8 @@ siteUpdates () {
 
             cd ..
             
-            [ "$GITCSYCMSDOCSOLD" == "$GITSITENEW" ] || kill $3 # restart ndividual sub process
-            [ "$GITSITEOLD" == "$GITCSYCMSDOCSNEW" ] || kill $3 # restart ndividual sub process
+            [ "$GITCSYCMSDOCSOLD" == "$GITCSYCMSDOCSNEW" ] || kill $3 # restart ndividual sub process
+            [ "$GITSITEOLD" == "$GITSITENEW" ] || kill $3 # restart ndividual sub process
             sleep $checktime
         }
     done

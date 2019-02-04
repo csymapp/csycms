@@ -15,7 +15,7 @@ function route_home (config, reffilePaths) {
   return function (req, res, next) {
 
     // redirect to first page
-    res.redirect(reffilePaths.modified[0]);
+    return res.redirect(reffilePaths.modified[0]);
 
     // Generate Filepath
     var filepath = get_filepath({
