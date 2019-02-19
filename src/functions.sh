@@ -90,7 +90,7 @@ setUpSite () {
     mkdir -p "content/$1"
     mkdir -p "config/$1"
     mkdir -p "public/sites/$1"
-    mkdir -p "layouts/sites/$1"
+    mkdir -p "layouts/$1"
     
     
     cd "content/$1"
