@@ -11,6 +11,7 @@ themes/
 public/themes
 public/sites
 config/
+layouts/
 
 # Logs
 logs

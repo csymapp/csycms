@@ -70,12 +70,12 @@ function initialize(config) {
 
   // console.log(`DIR: ${config.public_dir}`)
 
-  app.set('views', path.join(__dirname, '..', 'themes'));
-  app.set('view options', { layout: path.join(__dirname, '..', 'themes', config.theme_name, 'templates') });
-  console.log(path.join(__dirname, '..', 'themes', config.theme_name, 'templates'))
+  app.set('views', path.join(__dirname, '..', 'layouts'));
+  app.set('view options', { layout: path.join(__dirname, '..', 'layouts', config.site, config.theme_name) });
+  // console.log(path.join(__dirname, '..', 'layouts', config.theme_name, 'templates'))
   // app.set('views', path.join(config.theme_dir, config.theme_name, 'templates'));
   // app.set('views', path.join(__dirname, '..', 'themes', config.theme_name, 'templates'));
-  app.set('layout', path.join(config.theme_name, 'templates', 'layout'));
+  app.set('layout', path.join(config.site, config.theme_name, 'layout'));
 
 
   //  // Setup Views
@@ -95,8 +95,14 @@ function initialize(config) {
   let iconPath = path.join(config.public_dir, 'sites', site, '/icon.png')
   if (fse.existsSync(iconPath)) {
     app.use(favicon(iconPath));
-  } else
+  } else{
+    iconPath = path.join(config.public_dir, 'sites', site, '/icon.svg')
+    console.log(iconPath)
+    if (fse.existsSync(iconPath)) 
+      app.use(favicon(iconPath));
+  else
   app.use(favicon(path.join(config.public_dir, '/icon.png'))); 
+  }
   // app.use(favicon(path.join(__dirname, '..', 'public', '/icon.png')));   # 
   app.use(logger('dev'));
   app.use(body_parser.json());

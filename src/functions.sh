@@ -90,6 +90,7 @@ setUpSite () {
     mkdir -p "content/$1"
     mkdir -p "config/$1"
     mkdir -p "public/sites/$1"
+    mkdir -p "layouts/sites/$1"
     
     
     cd "content/$1"
@@ -102,6 +103,7 @@ setUpSite () {
         # cp -r "content/$1/public/content" "content/$1"
         cp -r "content/$1/public/config/*" "config/$1"
         cp -r "content/$1/public/public/*" "public/sites/$1"
+        cp -r "content/$1/public/layouts/*" "layouts/sites/$1"
     } || echo -n""
     
     cd "content/$1"

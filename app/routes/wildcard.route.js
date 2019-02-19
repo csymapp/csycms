@@ -214,6 +214,8 @@ function route_wildcard (config, reffilePaths) {
           }
           return {retpages:pages, retmodified: modified, breadCrumbs}
         }
+
+        console.log(pageList)
       
         // console.log(meta)
         let retpageList = removeParent([...pageList])
@@ -228,14 +230,24 @@ function route_wildcard (config, reffilePaths) {
         let layout
         , theme = config.theme_name
         if(meta.theme) theme = meta.theme
+        // if(meta.page)
+        //   render = path.join(theme, 'templates', meta.page)
+        // else 
+        //   render = path.join(theme, 'templates', render) 
         if(meta.page)
-          render = path.join(theme, 'templates', meta.page)
+          render = path.join(config.site, theme, meta.page)
         else 
-          render = path.join(theme, 'templates', render) 
+          render = path.join(config.site, theme, render) 
+        // if(meta.layout)
+        //   layout = path.join(theme, 'templates', meta.layout)
+        // else 
+        //   layout = path.join(theme, 'templates', 'layout')
+          
         if(meta.layout)
-          layout = path.join(theme, 'templates', meta.layout)
+          layout = path.join(config.site, theme, meta.layout)
         else 
-          layout = path.join(theme, 'templates', 'layout')
+          layout = path.join(config.site, theme, 'layout')
+
         if(meta.redirect) {
           let redirectPath = meta.redirect
           let resCode =  redirectPath.match(/\[(.*?)\]/);
