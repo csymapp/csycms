@@ -215,7 +215,7 @@ function route_wildcard (config, reffilePaths) {
           return {retpages:pages, retmodified: modified, breadCrumbs}
         }
 
-        console.log(pageList)
+        // console.log(pageList)
       
         // console.log(meta)
         let retpageList = removeParent([...pageList])
@@ -258,6 +258,8 @@ function route_wildcard (config, reffilePaths) {
             res.redirect(redirectPath, resCode[1])
           }
         }
+        console.log(render)
+        console.log(theme)
         if(!meta.response_code)meta.response_code = 200
         return res.status(meta.response_code).render( render, {
           config        : config,

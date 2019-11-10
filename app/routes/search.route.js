@@ -74,10 +74,10 @@ function route_search(config, reffilePaths) {
 
     let layout
       , theme = config.theme_name
-      , render =
-
-        layout = path.join(theme, 'templates', 'layout')
+      , render = layout = path.join(theme, 'templates', 'layout')
     render = path.join(theme, 'templates', 'search')
+    render = path.join(config.site, theme, 'search')
+    layout = path.join(config.site, theme, 'layout')
     return res.render(render, {
       config: config,
       // pages         : pageListSearch,
