@@ -55,7 +55,7 @@ This is for features which have been deprecated. And you are not going to use ol
 
 ## ssh
 
-You will also need to setup ssh with all the keys for accessing repos (if you use any ssh remote, or if any of the repos of your sites is private). An [installation script]('/Install/installCsycms') is availed to help you with creating the keys. But if it fails to create the ssh keys for your git repo, you can [see how to create one](https://confluence.atlassian.com/bitbucket/set-up-an-ssh-key-728138079.html).
+You will also need to setup ssh with all the keys for accessing repos (if you use any ssh remote, or if any of the repos of your sites is private). An [installation script](/Install/installCsycms.sh) is availed to help you with creating the keys. But if it fails to create the ssh keys for your git repo, you can [see how to create one](https://confluence.atlassian.com/bitbucket/set-up-an-ssh-key-728138079.html).
 
 **[⬆ back home](#table-of-contents)**
 
