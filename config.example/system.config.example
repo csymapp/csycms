@@ -7,6 +7,7 @@ var path = require('path')
 , argv = yargs.argv
 , site = argv.SITE
 
+
 // Exports
 module.exports = function (ROOTPATH) {
 
@@ -15,10 +16,10 @@ module.exports = function (ROOTPATH) {
 
     // Your site title (format: page_title - site_title)
     site_space: 'CSECO',
+    
+    site_title: 'CSYMS Docs',
 
-    site_title: 'CSECO',
-
-    search_scope: 'local',
+    search_scope: 'global',
 
     // The base URL of your site (can use %base_url% in Markdown files)
     base_url: '',
@@ -54,7 +55,6 @@ module.exports = function (ROOTPATH) {
     content_dir: path.join(ROOTPATH, '..', 'content'),
 
     // Where is the public directory or document root?
-    // public_dir: path.join(ROOTPATH, '..', 'themes', 'default', 'public'),
     public_dir: path.join(ROOTPATH, '..', 'public'),
 
     // The base URL of your images folder,
@@ -128,10 +128,9 @@ module.exports = function (ROOTPATH) {
 
     table_of_contents: false
     // where is this site accessible?
-    // , domain: 'www.cseco.co.ke'
-    , domain: 'localhost:3001'
+    , domain: 'csycms.csymapp.com'
     // same as that in .env
-    , site: 'cseco'
+    , site: 'csycms'
 
   };
   // config.public_dir = path.join(ROOTPATH, '..', 'themes', config.theme_name, 'public');
