@@ -275,6 +275,7 @@ function route_wildcard (config, reffilePaths) {
           canEdit       : canEdit,
           navSlugs,
           breadCrumbs,
+          Toc: 'Toc',
           layout
         });
       }

@@ -35,6 +35,7 @@ function route_search(config, reffilePaths) {
     }
 
     let [err, searchResults] = await to(searchHandler(searchQuery, config));
+    console.log(searchResults)
     if (config.search_scope === 'global') {
       let configFiles = []
       for (let i in reffilePaths.otherSites) configFiles.push(reffilePaths.otherSites[i].config_file)
