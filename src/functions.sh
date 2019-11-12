@@ -106,7 +106,7 @@ setUpSite () {
     cd ../..
     {
         # cp -r "content/$1/public/content" "content/$1"
-        cp -r "content/$1/public/config/"* "config/$1"
+        #cp -r "content/$1/public/config/"* "config/$1"
         cp -r "content/$1/public/public/"* "public/sites/$1"
         cp -r "content/$1/public/layouts/"* "layouts/$1"
     } || echo -n""
