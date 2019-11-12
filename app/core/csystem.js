@@ -155,7 +155,9 @@ class Csystem
         // console.log(`=============================${content_dir}`)
         files = _.filter(files, function (file) {
             // remove also public folder from csycms docs
-            return file.substr(-3) === '.md' && ! file.includes('/csycmsdocs/public');
+            // remove also readme.md (relevant only for github)
+            let lowerFile = file.toLowerCase()
+            return file.substr(-3) === '.md' && ! file.includes('/csycmsdocs/public') && ! lowerFile.includes('readme.md');
         });
 
         let filesPath = files.map(function (file) {

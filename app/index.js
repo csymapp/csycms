@@ -51,6 +51,7 @@ function initialize(config) {
   var route_home = require('./routes/home.route.js')(config, pageList);
   var route_wildcard = require('./routes/wildcard.route.js')(config, pageList);
   var route_sitemap = require('./routes/sitemap.route.js')(config, pageList);
+  var route_robots_txt = require('./routes/robots.txt.route.js')(config, pageList);
 
   // New Express App
   var app = express();
@@ -162,11 +163,13 @@ function initialize(config) {
   } else if (config.authentication_for_read === true) {
     router.get('/sitemap.xml', authenticate, route_sitemap);
     router.get('/sitemap', authenticate, route_sitemap);
+    router.get('/robots.txt', authenticate, route_robots_txt);
     router.get('/:var(index)?', authenticate, route_search, route_home);
     router.get(/^([^.]*)/, authenticate, route_wildcard);
   } else {
     router.get('/sitemap.xml', route_sitemap);
     router.get('/sitemap', route_sitemap);
+    router.get('/robots.txt', route_robots_txt);
     router.get('/:var(index)?', route_search, route_home);
     router.get(/^([^.]*)/, route_wildcard);
   }

@@ -27,7 +27,11 @@ function route_sitemap (config) {
 
     // generate list urls
     var urls = filesPath.map(function (file) {
-      return '/' + file.replace('.md', '').replace('\\', '/');
+      let tmp =  '/' + file.replace('.md', '').replace('\\', '/');
+      tmp = tmp.replace(/[0-9]*\./g,'')
+      tmp = tmp.replace(/\/chapter$/,'')
+      tmp = tmp.replace(/\/docs$/,'')
+      return tmp;
     });
 
     // create sitemap.xml

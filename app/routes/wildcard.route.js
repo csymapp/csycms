@@ -70,11 +70,6 @@ function route_wildcard (config, reffilePaths) {
     }
 
     fs.readFile(file_path, 'utf8', function (error, content) {
-      console.log('no_ file___')
-      console.log('no_ file___')
-      console.log('no_ file___')
-      console.log('no_ file___')
-      console.log('no_ file___')
       if (error) {
         error.status = '404';
         error.message = config.lang.error['404'];
