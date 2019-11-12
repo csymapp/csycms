@@ -70,13 +70,19 @@ function route_wildcard (config, reffilePaths) {
     }
 
     fs.readFile(file_path, 'utf8', function (error, content) {
-
+      console.log('no_ file___')
+      console.log('no_ file___')
+      console.log('no_ file___')
+      console.log('no_ file___')
+      console.log('no_ file___')
       if (error) {
         error.status = '404';
         error.message = config.lang.error['404'];
         return next(error);
       }
-      if (path.extname(file_path) === '.md') {
+
+      let file_name = file_path.split('/').pop().toLowerCase()
+      if (path.extname(file_path) === '.md' && file_name !== 'readme.md') {
         let meta = contentProcessors.processMeta(content);
         meta.custom_title = meta.title;
         if (!meta.title) { meta.title = contentProcessors.slugToTitle(file_path); }
@@ -258,8 +264,8 @@ function route_wildcard (config, reffilePaths) {
             res.redirect(redirectPath, resCode[1])
           }
         }
-        console.log(render)
-        console.log(theme)
+        // console.log(render)
+        // console.log(theme)
         if(!meta.response_code)meta.response_code = 200
         return res.status(meta.response_code).render( render, {
           config        : config,

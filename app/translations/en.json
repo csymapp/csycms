@@ -25,7 +25,7 @@
   },
 
   "error": {
-    "404": "Whoops. Looks like this page doesn't exist."
+    "404": "Sorry. This page doesn't exist. You can click the back button to go back home"
   },
 
   "edit": {
