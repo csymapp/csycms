@@ -256,7 +256,7 @@ case "$1" in
             # mkdir -p "/tmp/csycms/"
             # cp -r "content/$ans" "/tmp/csycms/"
             mkdir -p "content/$ans/public/"
-            cp -r "config/$ans/"* "content/$ans/public/config"
+            #cp -r "config/$ans/"* "content/$ans/public/config"
             cp -r "public/sites/$ans/"* "content/$ans/public/public"
             cp -r "layouts/$ans/"* "content/$ans/public/layouts"
             
@@ -300,7 +300,7 @@ case "$1" in
             echo "site $ans not found! Please try again." 
             
         } || {  
-            SITE=$RUNSITE PORT=$RUNPORT nodemon bin/app.js
+            SITE=$RUNSITE PORT=$RUNPORT nodemon bin/app.js || SITE=$RUNSITE PORT=$RUNPORT node bin/app.js
         }
     ;;
     

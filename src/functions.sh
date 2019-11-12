@@ -95,7 +95,12 @@ setUpSite () {
     
     cd "content/$1"
     {
-        git clone $2 . && cp ../../config/system.config.example "../../config/$1/system.config.js"
+        git clone $2 .
+        FILE="../../config/$1/system.config.js"
+        if [ ! -f "$FILE" ]; then
+            cp ../../config/system.config.example "../../config/$1/system.config.js"
+        fi 
+        
     } || git pull origin master
     
     cd ../..
