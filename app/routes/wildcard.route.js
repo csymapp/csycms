@@ -68,19 +68,13 @@ function route_wildcard (config, reffilePaths) {
       preMeta.response_code = 404;
     }
     let file_path      = path.normalize(config.content_dir + slug);
-    console.log(file_path)
-    console.log(slug)
-    console.log(file_path)
     file_path = file_path.replace(/\/00\./g, '/')
     let file_path_orig = file_path;
 
     if (file_path.indexOf(suffix, file_path.length - suffix.length) !== -1) {
       file_path = file_path.slice(0, -suffix.length - 1);
     }
-    
-    console.log(file_path)
-    console.log(file_path)
-    console.log(file_path)
+
     fs.readFile(file_path, 'utf8', function (error, content) {
       // if (error) {
       //   preMeta.response_code = 404;
@@ -93,13 +87,11 @@ function route_wildcard (config, reffilePaths) {
       // }
 
       let file_name = file_path.split('/').pop().toLowerCase()
-      console.log(file_name)
       function allowErrorPages() {
         if(preMeta.response_code)return true;
         return !file_name.includes('.error.md')
       }
       if (path.extname(file_path) === '.md' && file_name !== 'readme.md' && allowErrorPages()) {
-        console.log('passed')
         let meta = contentProcessors.processMeta(content);
         if(preMeta.response_code)meta.response_code = preMeta.response_code;
         meta.custom_title = meta.title;
@@ -285,7 +277,6 @@ function route_wildcard (config, reffilePaths) {
           }
         }
         // console.log(render)
-        console.log(slug)
         if(!meta.response_code)meta.response_code = 200
         return res.status(meta.response_code).render( render, {
           config        : config,
