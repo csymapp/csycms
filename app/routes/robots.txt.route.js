@@ -12,6 +12,7 @@ const utils             = require('../core/utils');
 function route_robots_txt (config) {
   return function (req, res, next) {
       var hostname = config.hostname || req.headers.host;
+      if(!hostname.includes('http://'))hostname=`http://${hostname}`
 
     // res.header('Content-Type', 'application/xml');
     res.end(`User-agent: * \r\nDisallow: \nAllow: / \r\nSitemap: ${hostname}/sitemap.xml \r\n`);

@@ -29,7 +29,15 @@ module.exports = function (ROOTPATH) {
 
     // Footer Text / Copyright
     copyright: 'Copyright &copy; 2018 - ' + new Date().getFullYear() + ' - <a href="http://www.cseco.co.ke">CSECO</a>',
-
+    github: 'https://github.com/csymapp/',
+    facebook: false,
+    youtube: false,
+     externalLinks: false,
+    // externalLinks: [
+    //   '<a href="">Features</a>',
+    //   '<a class="btn" href="">Button Link</a>'
+    // ],
+    
     // Excerpt length (used in search)
     excerpt_length: 400,
 
