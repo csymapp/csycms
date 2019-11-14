@@ -18,8 +18,14 @@ function route_sitemap (config) {
     // get list md files
     var files = listFiles(content_dir);
     files = _.filter(files, function (file) {
-      return file.substr(-3) === '.md';
+      let lowerFile = file.toLowerCase()
+      return file.substr(-3) === '.md' && ! file.includes('/csycmsdocs/public') && ! lowerFile.includes('readme.md') && !file.includes('.error.md');
     });
+
+    // files = _.filter(files, function (file) {
+    //   file.substr(-3) === '.md' && ! file.includes('/csycmsdocs/public') && ! lowerFile.includes('readme.md')
+    //   return file.substr(-3) === '.md';
+    // });
 
     var filesPath = files.map(function (file) {
       return file.replace(content_dir, '');
@@ -27,6 +33,7 @@ function route_sitemap (config) {
 
     // generate list urls
     var urls = filesPath.map(function (file) {
+      console.log(file)
       let tmp =  '/' + file.replace('.md', '').replace('\\', '/');
       tmp = tmp.replace(/[0-9]*\./g,'')
       tmp = tmp.replace(/\/chapter$/,'')
@@ -48,7 +55,7 @@ function route_sitemap (config) {
       };
       sitemap.add({
         url: (config.prefix_url || '') + urls[i],
-        changefreq: 'weekly',
+        changefreq: 'hourly',
         priority: 0.8,
         lastmod: utils.getLastModified(conf, contentProcessors.processMeta(content), files[i])
       });
