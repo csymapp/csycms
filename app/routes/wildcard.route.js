@@ -152,6 +152,7 @@ function route_wildcard (config, reffilePaths) {
         }
 
         // slug = reffilePaths.modified[pathIndex]
+        if(!meta.response_code)slug = reffilePaths.modified[pathIndex]
         const removeParent = (pages) => {
           let modified = false;
           for(let i in pages) {
