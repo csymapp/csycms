@@ -4,7 +4,7 @@ todo
 .env
 system.config.js
 content/
-content.bac/
+*.bac/
 config/
 example/
 themes/
