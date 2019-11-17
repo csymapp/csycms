@@ -1,21 +1,20 @@
-
 'use strict';
 
 // Modules
-let path                           = require('path');
-let fs                             = require('fs');
-let build_nested_pages             = require('../functions/build_nested_pages.js');
-let marked                         = require('marked');
-let toc                            = require('markdown-toc');
-let remove_image_content_directory = require('../functions/remove_image_content_directory.js')
-, showdown                         = require('showdown')
-, converter                        = new showdown.Converter()
-, MarkdownIt                       = require('markdown-it')
-, md                               = new MarkdownIt({
-  html: true
-})
-, markdownItAttrs                   = require('markdown-it-attrs');
- 
+let path = require('path');
+let fs = require('fs');
+let build_nested_pages = require('../functions/build_nested_pages.js');
+let marked = require('marked');
+let toc = require('markdown-toc');
+let remove_image_content_directory = require('../functions/remove_image_content_directory.js'),
+  showdown = require('showdown'),
+  converter = new showdown.Converter(),
+  MarkdownIt = require('markdown-it'),
+  md = new MarkdownIt({
+    html: true
+  }),
+  markdownItAttrs = require('markdown-it-attrs');
+
 
 const contentProcessors = require('../functions/contentProcessors');
 const contentsHandler = require('../core/contents');
@@ -38,36 +37,48 @@ md.use(require('markdown-it-div'));
 // md.use(require('markdown-it-vue'));
 // md.use(require('markdown-it-container'), '[ui-tabs]');
 
-function route_wildcard (config, reffilePaths) {
+function route_wildcard(config, reffilePaths) {
   return function (req, res, next) {
-    if(!req.session)req.session = {}
+    if (!req.session) req.session = {}
     // Skip if nothing matched the wildcard Regex
-    if (!req.params[0]) { return next(); }
+    if (!req.params[0]) {
+      return next();
+    }
 
     let suffix = 'edit';
-    let slug   = req.params[0];
+    let slug = req.params[0];
     let originalFilePaths = reffilePaths["original"]
     let filePaths = reffilePaths["modified"]
     let nestedPages = reffilePaths["nestedPages"]
-    let pathIndex = filePaths.findIndex(function(elem){return elem === slug})
+    let pathIndex = filePaths.findIndex(function (elem) {
+      return elem === slug
+    })
     slug = originalFilePaths[pathIndex]
+
     let navSlugs = {}
     // if(pathIndex === 0) navSlugs = {next:encodeURI(filePaths[pathIndex+1])}
-    if(pathIndex === 0) navSlugs = {next:filePaths[pathIndex+1]}
+    if (pathIndex === 0) navSlugs = {
+      next: filePaths[pathIndex + 1]
+    }
     else {
       // if(pathIndex === reffilePaths.length - 1)navSlugs = {prev:encodeURI(filePaths[pathIndex-1])}
-      if(pathIndex === reffilePaths.length - 1)navSlugs = {prev:(filePaths[pathIndex-1])}
+      if (pathIndex === reffilePaths.length - 1) navSlugs = {
+        prev: (filePaths[pathIndex - 1])
+      }
       // else navSlugs = {prev:filePaths[pathIndex-1], next:encodeURI(filePaths[pathIndex+1])}
-      else navSlugs = {prev:filePaths[pathIndex-1], next:(filePaths[pathIndex+1])}
+      else navSlugs = {
+        prev: filePaths[pathIndex - 1],
+        next: (filePaths[pathIndex + 1])
+      }
     }
 
-    
+
     let preMeta = {};
-    if(slug === undefined) {
+    if (slug === undefined) {
       slug = '/errorpages/404.error.md'
       preMeta.response_code = 404;
     }
-    let file_path      = path.normalize(config.content_dir + slug);
+    let file_path = path.normalize(config.content_dir + slug);
     file_path = file_path.replace(/\/00\./g, '/')
     let file_path_orig = file_path;
 
@@ -87,22 +98,25 @@ function route_wildcard (config, reffilePaths) {
       // }
 
       let file_name = file_path.split('/').pop().toLowerCase()
+
       function allowErrorPages() {
-        if(preMeta.response_code)return true;
+        if (preMeta.response_code) return true;
         return !file_name.includes('.error.md')
       }
       if (path.extname(file_path) === '.md' && file_name !== 'readme.md' && allowErrorPages()) {
         let meta = contentProcessors.processMeta(content);
-        if(preMeta.response_code)meta.response_code = preMeta.response_code;
+        if (preMeta.response_code) meta.response_code = preMeta.response_code;
         meta.custom_title = meta.title;
-        if (!meta.title) { meta.title = contentProcessors.slugToTitle(file_path); }
+        if (!meta.title) {
+          meta.title = contentProcessors.slugToTitle(file_path);
+        }
         // Content
         content = contentProcessors.stripMeta(content);
         content = contentProcessors.processVars(content, config);
 
         let template = meta.template || 'page';
-        let render   = template;
-        
+        let render = template;
+
         if (file_path_orig.indexOf(suffix, file_path_orig.length - suffix.length) !== -1) {
 
           // Edit Page
@@ -110,7 +124,7 @@ function route_wildcard (config, reffilePaths) {
             res.redirect('/login');
             return;
           }
-          render  = 'edit';
+          render = 'edit';
 
         } else {
 
@@ -124,7 +138,7 @@ function route_wildcard (config, reffilePaths) {
 
           // Render Markdown
           marked.setOptions({
-            langPrefix : ''
+            langPrefix: ''
           });
           content = md.render(content)
 
@@ -144,28 +158,29 @@ function route_wildcard (config, reffilePaths) {
         }
 
         // slug = reffilePaths.modified[pathIndex]
-        if(!meta.response_code)slug = reffilePaths.modified[pathIndex]
+        // console.log(meta.response_code)
+        if (!meta.response_code || meta.response_code==200) slug = reffilePaths.modified[pathIndex]
         const removeParent = (pages) => {
           let modified = false;
-          for(let i in pages) {
+          for (let i in pages) {
             pages[i].parent = false
-            if(pages[i].files)
+            if (pages[i].files)
               pages[i].files = removeParent(pages[i].files)
           }
           return pages
         }
 
         const getTitle = (slug, pages) => {
-          let title ;
-          for(let i in pages) {
-            if(pages[i].slug === slug) {
+          let title;
+          for (let i in pages) {
+            if (pages[i].slug === slug) {
               return pages[i].title
             }
           }
-          for(let i in pages) {
-            if(pages[i].files) {
+          for (let i in pages) {
+            if (pages[i].files) {
               let tmp = getTitle(slug, pages[i].files)
-              if(tmp) title = tmp
+              if (tmp) title = tmp
             }
           }
           return title
@@ -176,9 +191,9 @@ function route_wildcard (config, reffilePaths) {
           let breadCrumbSlugs = []
           let parts = slug.split('/')
           parts = parts.slice(1)
-          for(let i in parts) {
-            let tmpParts = [... parts];
-            tmpParts = tmpParts.reverse().slice(tmpParts.length-i-1)
+          for (let i in parts) {
+            let tmpParts = [...parts];
+            tmpParts = tmpParts.reverse().slice(tmpParts.length - i - 1)
             tmpParts.reverse();
             tmpParts = '/' + tmpParts.join('/')
             let tmpSlug = tmpParts
@@ -189,7 +204,11 @@ function route_wildcard (config, reffilePaths) {
           breadCrumbTitles.reverse()
           breadCrumbSlugs.reverse()
           const addtoRets = (rets, linetoAdd, tmpSlug, isEnd) => {
-            if(Object.keys(rets).length === 0) return {title: linetoAdd, slug: tmpSlug, isEnd}
+            if (Object.keys(rets).length === 0) return {
+              title: linetoAdd,
+              slug: tmpSlug,
+              isEnd
+            }
             return {
               title: linetoAdd,
               breadCrumbs: rets,
@@ -198,8 +217,8 @@ function route_wildcard (config, reffilePaths) {
             }
           }
           let ret = {}
-          for(let i in breadCrumbTitles) {
-            let isEnd = (parseInt(i) === 0)? true: false;
+          for (let i in breadCrumbTitles) {
+            let isEnd = (parseInt(i) === 0) ? true : false;
             ret = addtoRets(ret, breadCrumbTitles[i], breadCrumbSlugs[i], isEnd)
           }
           return ret;
@@ -207,88 +226,93 @@ function route_wildcard (config, reffilePaths) {
         const getActive = (pages, slug, allpages) => {
           let modified = false;
           let breadCrumbs;
-          for(let i in pages) {
-            if(pages[i].slug === slug) {
+          for (let i in pages) {
+            if (pages[i].slug === slug) {
               pages[i].active = true
-              breadCrumbs=  createBreadCrumbs(pages[i].slug, allpages)
+              breadCrumbs = createBreadCrumbs(pages[i].slug, allpages)
               modified = true;
             } else {
               pages[i].active = false
             }
-            if(pages[i].files) {
+            if (pages[i].files) {
               let tmp = getActive(pages[i].files, slug, allpages)
               let retpages = tmp.retpages
               let retmodified = tmp.retmodified
-              
-              
-              if(retmodified === true) {
+
+
+              if (retmodified === true) {
                 pages[i].parent = true;
                 breadCrumbs = tmp.breadCrumbs
                 modified = true;
               }
               pages[i].files = retpages
             }
-              
+
           }
-          return {retpages:pages, retmodified: modified, breadCrumbs}
+          return {
+            retpages: pages,
+            retmodified: modified,
+            breadCrumbs
+          }
         }
 
         // console.log(pageList)
-      
+
         // console.log(meta)
         let retpageList = removeParent([...pageList])
         retpageList = getActive([...retpageList], slug, [...retpageList])
         let breadCrumbs = retpageList.breadCrumbs
         retpageList = retpageList.retpages
         let tmp = {}
-        if(navSlugs.prev !== 'undefined' && navSlugs.prev !== undefined)tmp.prev = encodeURI( navSlugs.prev)
-        if(navSlugs.next !== 'undefined' && navSlugs.next !== undefined) tmp.next = encodeURI( navSlugs.next)
-        navSlugs = {... tmp}
+        if (navSlugs.prev !== 'undefined' && navSlugs.prev !== undefined) tmp.prev = encodeURI(navSlugs.prev)
+        if (navSlugs.next !== 'undefined' && navSlugs.next !== undefined) tmp.next = encodeURI(navSlugs.next)
+        navSlugs = {
+          ...tmp
+        }
 
-        let layout
-        , theme = config.theme_name
-        if(meta.theme) theme = meta.theme
+        let layout, theme = config.theme_name
+        if (meta.theme) theme = meta.theme
         // if(meta.page)
         //   render = path.join(theme, 'templates', meta.page)
         // else 
         //   render = path.join(theme, 'templates', render) 
-        if(meta.page)
+        if (meta.page)
           render = path.join(config.site, theme, meta.page)
-        else 
-          render = path.join(config.site, theme, render) 
+        else
+          render = path.join(config.site, theme, render)
         // if(meta.layout)
         //   layout = path.join(theme, 'templates', meta.layout)
         // else 
         //   layout = path.join(theme, 'templates', 'layout')
-          
-        if(meta.layout)
+
+        if (meta.layout)
           layout = path.join(config.site, theme, meta.layout)
-        else 
+        else
           layout = path.join(config.site, theme, 'layout')
 
-        if(meta.redirect) {
+        if (meta.redirect) {
           let redirectPath = meta.redirect
-          let resCode =  redirectPath.match(/\[(.*?)\]/);
-          
-          if(!resCode) res.redirect(redirectPath)
+          let resCode = redirectPath.match(/\[(.*?)\]/);
+
+          if (!resCode) res.redirect(redirectPath)
           else {
             redirectPath = redirectPath.replace(resCode[0], '')
             res.redirect(redirectPath, resCode[1])
           }
         }
         // console.log(render)
-        if(!meta.response_code)meta.response_code = 200
-        return res.status(meta.response_code).render( render, {
-          config        : config,
-          pages         : retpageList,
-          meta          : meta,
-          content       : content,
-          body_class    : template + '-' + contentProcessors.cleanString(slug),
-          last_modified : utils.getLastModified(config, meta, file_path),
-          lang          : config.lang,
-          loggedIn      : loggedIn,
-          username      : (config.authentication ? req.session.username : null),
-          canEdit       : canEdit,
+        if (!meta.response_code) meta.response_code = 200
+        return res.status(meta.response_code).render(render, {
+          config: config,
+          pages: retpageList,
+          meta: meta,
+          content: content,
+          body_class: template + '-' + contentProcessors.cleanString(slug),
+          last_modified: utils.getLastModified(config, meta, file_path),
+          lang: config.lang,
+          loggedIn: loggedIn,
+          username: (config.authentication ? req.session.username : null),
+          canEdit: canEdit,
           navSlugs,
           breadCrumbs,
           Toc: 'Toc',
