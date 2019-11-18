@@ -14,8 +14,9 @@ setUpThemes () {
         git clone $THEMESREPO .
     } || git pull origin master
     # copy themes public dirs to public
-    mkdir ../public/themes
+    mkdir -p ../public/themes
     for d in */ ; do
+
         mkdir -p "../public/themes/$d"
         # echo "$d"public/*
         # echo "$d"public/*
