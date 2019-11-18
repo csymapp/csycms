@@ -22,9 +22,8 @@ setUpThemes () {
         cp -r "$d"public/* "../public/themes/$d"
 
         # echo "$d"templates/*
-        cp -u "$d"templates/* ../layouts/*/"$d"
+        cp "$d"templates/* ../layouts/*/"$d"
     done
-    exit
     cd ..
 }
 
