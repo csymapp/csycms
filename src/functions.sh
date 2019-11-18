@@ -16,10 +16,16 @@ setUpThemes () {
     # copy themes public dirs to public
     mkdir ../public/themes
     for d in */ ; do
-        mkdir -p "../public/themes/$d/"
+        mkdir -p "../public/themes/$d"
+        # echo "$d"public/*
+        # echo "$d"public/*
+        # echo "$d"public/*
         cp -r "$d"public/* "../public/themes/$d"
-        echo "$d"public/* "../public/themes/$d"
+
+        # echo "$d"templates/*
+        cp -u "$d"templates/* ../layouts/*/"$d"
     done
+    exit
     cd ..
 }
 
