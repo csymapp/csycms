@@ -10,9 +10,7 @@ setUpThemes () {
     
     mkdir -p themes
     cd themes
-    {
-        git clone $THEMESREPO .
-    } || git pull origin master
+    git clone $THEMESREPO . || git pull origin master
     # copy themes public dirs to public
     mkdir -p ../public/themes
     for d in */ ; do
@@ -121,9 +119,7 @@ setUpSite () {
     cd "content/$1"
     mkdir -p csycmsdocs
     cd csycmsdocs
-    {
-        git clone $CSYCMSDOCSREPO .
-    } ||     git pull origin master
+    git clone $CSYCMSDOCSREPO . ||     git pull origin master
     
     cd ../../..
     
