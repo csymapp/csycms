@@ -123,7 +123,7 @@ setUpSite () {
         # cp -r "content/$1/public/content" "content/$1"
         #cp -r "content/$1/public/config/"* "config/$1"
         cp -r "content/$1/public/public/"* "public/sites/$1"
-        cp -r "content/$1/public/layouts/"* "layouts/$1"
+        # cp -r "content/$1/public/layouts/"* "layouts/$1"
     } || echo -n""
     
     cd "content/$1"
@@ -156,6 +156,7 @@ monitors () {
     DOMAIN=$(echo $CONFIG | cut -d \| -f 4)
     
     setUpSite $SITE $SITEREPO
+    setUpThemes
     
     echo "PORT=$PORT SITE=$SITE node bin/app.js --SITE=$SITE &"
     
