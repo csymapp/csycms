@@ -35,7 +35,6 @@ setUpThemes () {
         done
         ls
     done
-    exit
     cd ..
 }
 
