@@ -14,16 +14,28 @@ setUpThemes () {
     # copy themes public dirs to public
     mkdir -p ../public/themes
     for d in */ ; do
-
+        
         mkdir -p "../public/themes/$d"
         # echo "$d"public/*
         # echo "$d"public/*
         # echo "$d"public/*
         cp -r "$d"public/* "../public/themes/$d"
-
+        
         # echo "$d"templates/*
-        cp "$d"templates/* ../layouts/*/"$d"
+        # echo "$d"templates/*
+        # mkdir -p "../layouts/.*/"$d""
+        # echo "../layouts/*/"$d""
+        
+        # cp "$d"templates/* ../layouts/**/"$d"
+        for site in ../layouts/*; do
+            if [ -d "$site" ]; then
+                mkdir -p "$site/$d"
+                cp "$d"templates/* "$site/$d"
+            fi
+        done
+        ls
     done
+    exit
     cd ..
 }
 
@@ -31,22 +43,22 @@ csystemUpdates () {
     checktime=$(($UPDATEINTERVAL * 60))
     # create some offset of 120 seconds
     sleep $((2 * 60))
-    while : 
+    while :
     do
         {
             GITOLD=$(git log|head)
             git pull origin master
             GITNEW=$(git log|head)
-
+            
             cd themes/
             GITOLDTHEME=$(git log|head)
             git pull origin master
             GITNEWTHEME=$(git log|head)
-
+            
             cd ..
             
-            [ "$GITOLD" == "$GITNEW" ] || systemctl restart csycms.service 
-            [ "$GITOLDTHEME" == "$GITNEWTHEME" ] || systemctl restart csycms.service 
+            [ "$GITOLD" == "$GITNEW" ] || systemctl restart csycms.service
+            [ "$GITOLDTHEME" == "$GITNEWTHEME" ] || systemctl restart csycms.service
             sleep $checktime
         }
     done
@@ -62,18 +74,18 @@ siteUpdates () {
     DOMAIN=$(echo $CONFIG | cut -d \| -f 4)
     
     cd "content/$SITE"
-    while : 
+    while :
     do
         {
             GITSITEOLD=$(git log|head)
             git pull origin master
             GITSITENEW=$(git log|head)
-
+            
             cd csycmsdocs
             GITCSYCMSDOCSOLD=$(git log|head)
             git pull origin master
             GITCSYCMSDOCSNEW=$(git log|head)
-
+            
             cd ..
             
             [ "$GITCSYCMSDOCSOLD" == "$GITCSYCMSDOCSNEW" ] || kill $3 # restart ndividual sub process
@@ -103,7 +115,7 @@ setUpSite () {
         FILE="../../config/$1/system.config.js"
         if [ ! -f "$FILE" ]; then
             cp ../../config/system.config.example "../../config/$1/system.config.js"
-        fi 
+        fi
         
     } || git pull origin master
     
@@ -126,11 +138,11 @@ setUpSite () {
 
 stopOtherChildren () {
     if [[ "" !=  "$1" ]]; then
-    kill -9 $1
+        kill -9 $1
     fi
     
     if [[ "" !=  "$2" ]]; then
-    kill -9 $2
+        kill -9 $2
     fi
     
 }
@@ -145,21 +157,21 @@ monitors () {
     DOMAIN=$(echo $CONFIG | cut -d \| -f 4)
     
     setUpSite $SITE $SITEREPO
-
+    
     echo "PORT=$PORT SITE=$SITE node bin/app.js --SITE=$SITE &"
-
+    
     
     PORT=$PORT SITE=$SITE  node bin/app.js --SITE=$SITE &
     PROC_ID=$!
     
     siteUpdates $1 $2 $PROC_ID &
     UPDATE_PROC_ID=$!
-
+    
     echo "$SITE: $PORT: $PROC_ID: $UPDATE_PROC_ID"
     
     trap "stopOtherChildren $PROC_ID $UPDATE_PROC_ID && echo stopping $PROC_ID and $UPDATE_PROC_ID" EXIT
     trap "stopOtherChildren $PROC_ID $UPDATE_PROC_ID && echo stopping $PROC_ID and $UPDATE_PROC_ID" SIGCHLD
-
+    
     wait
     
     monitors $CONFIG $index
