@@ -19,6 +19,8 @@ module.exports = function (ROOTPATH) {
     
     site_title: 'CSYMS Docs',
 
+    title_size: 2,
+
     search_scope: 'global',
 
     // The base URL of your site (can use %base_url% in Markdown files)
