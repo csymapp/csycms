@@ -300,7 +300,8 @@ function route_wildcard(config, reffilePaths) {
             res.redirect(redirectPath, resCode[1])
           }
         }
-        // console.log(render)
+        let toc;
+        meta.toc === false? toc = false: (meta.toc === 'false'? toc = false:  (meta.toc === undefined? toc = true: toc= 'toc'));
         if (!meta.response_code) meta.response_code = 200
         return res.status(meta.response_code).render(render, {
           config: config,
@@ -315,7 +316,7 @@ function route_wildcard(config, reffilePaths) {
           canEdit: canEdit,
           navSlugs,
           breadCrumbs,
-          Toc: 'Toc',
+          Toc: toc,
           layout
         });
       }

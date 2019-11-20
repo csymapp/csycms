@@ -124,6 +124,9 @@ setUpSite () {
         #cp -r "content/$1/public/config/"* "config/$1"
         cp -r "content/$1/public/public/"* "public/sites/$1"
         cp -r "content/$1/public/layouts/"* "layouts/$1"
+        rm -rf "content/$1/errorpages"
+        mkdir -p "content/$1/errorpages"
+        cp -r errorpages "content/$1/errorpages"
     } || echo -n""
     
     cd "content/$1"
