@@ -301,6 +301,10 @@ function route_wildcard(config, reffilePaths) {
           }
         }
         let toc;
+        // let last_modified = utils.getLastModified(config, meta, file_path);
+        let author;
+        author = meta.metadata.author?meta.metadata.author:false;
+        // if(meta.metadata.author) lastmo
         meta.toc === false? toc = false: (meta.toc === 'false'? toc = false:  (meta.toc === undefined? toc = true: toc= 'toc'));
         if (!meta.response_code) meta.response_code = 200
         return res.status(meta.response_code).render(render, {
@@ -310,6 +314,7 @@ function route_wildcard(config, reffilePaths) {
           content: content,
           body_class: template + '-' + contentProcessors.cleanString(slug),
           last_modified: utils.getLastModified(config, meta, file_path),
+          author,
           lang: config.lang,
           loggedIn: loggedIn,
           username: (config.authentication ? req.session.username : null),
