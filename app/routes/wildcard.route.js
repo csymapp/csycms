@@ -304,6 +304,8 @@ function route_wildcard(config, reffilePaths) {
         // let last_modified = utils.getLastModified(config, meta, file_path);
         let author;
         author = meta.metadata.author?meta.metadata.author:false;
+        content = content.split('%7B%7B%7Bcself%7D%7D%7D').join(config.site);
+        // console.log(content)
         // if(meta.metadata.author) lastmo
         meta.toc === false? toc = false: (meta.toc === 'false'? toc = false:  (meta.toc === undefined? toc = true: toc= 'toc'));
         if (!meta.response_code) meta.response_code = 200
