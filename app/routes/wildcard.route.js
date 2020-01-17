@@ -304,7 +304,15 @@ function route_wildcard(config, reffilePaths) {
         // let last_modified = utils.getLastModified(config, meta, file_path);
         let author;
         author = meta.metadata.author?meta.metadata.author:false;
-        content = content.split('%7B%7B%7Bcself%7D%7D%7D').join(config.site);
+        // content = content.split('%7B%7B%7Bcself%7D%7D%7D').join(config.site);
+        
+        // content = content.split('{{{cself}}}').join(`${config.domain}/sites/${config.site}`);
+        let domain = config.domain.split('http://').length > 1? config.domain: config.domain.split('http://').length > 1?config.domain: 'http://' + config.domain;
+        console.log(domain)
+        console.log(config.domain)
+        content = content.split('%7B%7B%7Bcself%7D%7D%7D').join(`${domain}/sites/${config.site}`);
+        content = content.split('{{{cself}}}').join(`${domain}/sites/${config.site}`);
+        // content = content.split('{{{cself}}}').join(config.site);
         // console.log(content)
         // if(meta.metadata.author) lastmo
         meta.toc === false? toc = false: (meta.toc === 'false'? toc = false:  (meta.toc === undefined? toc = true: toc= 'toc'));
