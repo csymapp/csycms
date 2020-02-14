@@ -2,35 +2,36 @@
 
 // Modules
 const
-  path = require('path')
-  , express = require('express')
-  , favicon = require('serve-favicon')
-  , logger = require('morgan')
-  , cookie_parser = require('cookie-parser')
-  , body_parser = require('body-parser')
-  , moment = require('moment')
-  , hogan = require('hogan-express')
-  , session = require('express-session')
-  , passport = require('passport')
-  , dotenv = require('dotenv')
-  , fse = require('fs-extra')
-  , csystem = require(__dirname + '/core/csystem')
-  , yargs = require("yargs")
-  , argv = yargs.argv
-  , site = argv.SITE  || process.env.SITE
+  path = require('path'),
+  express = require('express'),
+  favicon = require('serve-favicon'),
+  logger = require('morgan'),
+  cookie_parser = require('cookie-parser'),
+  body_parser = require('body-parser'),
+  moment = require('moment'),
+  hogan = require('hogan-express'),
+  session = require('express-session'),
+  // passport = require('passport'),
+  // GitHubStrategy = require('passport-github').Strategy,
+  dotenv = require('dotenv'),
+  fse = require('fs-extra'),
+  csystem = require(__dirname + '/core/csystem'),
+  yargs = require("yargs"),
+  argv = yargs.argv,
+  site = argv.SITE || process.env.SITE
 
 function initialize(config) {
   dotenv.config()
   // Load Translations
-  if (!config.locale) { config.locale = 'en'; }
+  if (!config.locale) {
+    config.locale = 'en';
+  }
   if (!config.lang) {
     config.lang = require('./translations/' + config.locale + '.json');
   }
-
-  
-
-
-  if (config.content_dir[config.content_dir.length - 1] !== path.sep) { config.content_dir += path.sep; }
+  if (config.content_dir[config.content_dir.length - 1] !== path.sep) {
+    config.content_dir += path.sep;
+  }
   config.content_dir += site
   // Content_Dir requires trailing slash
   let pageList = csystem.loadPagesList(config.content_dir, config)
@@ -40,8 +41,6 @@ function initialize(config) {
   var authenticate_read_access = require('./middleware/authenticate_read_access.js')(config, pageList);
   var error_handler = require('./middleware/error_handler.js')(config, pageList);
   var oauth2 = require('./middleware/oauth2.js');
-  var route_login = require('./routes/login.route.js')(config, pageList);
-  var route_login_page = require('./routes/login_page.route.js')(config, pageList);
   var route_logout = require('./routes/logout.route.js');
   var route_page_edit = require('./routes/page.edit.route.js')(config, pageList);
   var route_page_delete = require('./routes/page.delete.route.js')(config, pageList);
@@ -52,6 +51,8 @@ function initialize(config) {
   var route_wildcard = require('./routes/wildcard.route.js')(config, pageList);
   var route_sitemap = require('./routes/sitemap.route.js')(config, pageList);
   var route_robots_txt = require('./routes/robots.txt.route.js')(config, pageList);
+  var route_login = require('./routes/login.route.js')(config, pageList, route_wildcard);
+  var route_login_page = require('./routes/login_page.route.js')(config, pageList);
 
   // New Express App
   var app = express();
@@ -64,20 +65,25 @@ function initialize(config) {
   moment.locale(config.locale);
 
   // Setup Views
-  if (!config.theme_dir) { config.theme_dir = path.join(__dirname, '..', 'themes'); }
-  if (!config.theme_name) { config.theme_name = 'default'; }
+  if (!config.theme_dir) {
+    config.theme_dir = path.join(__dirname, '..', 'themes');
+  }
+  if (!config.theme_name) {
+    config.theme_name = 'default';
+  }
   // if (!config.public_dir) { config.public_dir = path.join(__dirname, '..', 'public', config.theme_name, 'publice'); }
   // config.public_dir = path.join(__dirname, '..', 'public', config.theme_name, 'public');
 
   // console.log(`DIR: ${config.public_dir}`)
 
   app.set('views', path.join(__dirname, '..', 'layouts'));
-  app.set('view options', { layout: path.join(__dirname, '..', 'layouts', config.site, config.theme_name) });
+  app.set('view options', {
+    layout: path.join(__dirname, '..', 'layouts', config.site, config.theme_name)
+  });
   // console.log(path.join(__dirname, '..', 'layouts', config.theme_name, 'templates'))
   // app.set('views', path.join(config.theme_dir, config.theme_name, 'templates'));
   // app.set('views', path.join(__dirname, '..', 'themes', config.theme_name, 'templates'));
   app.set('layout', path.join(config.site, config.theme_name, 'layout'));
-
 
   //  // Setup Views
   //  if (!config.theme_dir)  { config.theme_dir  = path.join(__dirname, '..', 'themes'); }
@@ -85,8 +91,6 @@ function initialize(config) {
   //  if (!config.public_dir) { config.public_dir = path.join(config.theme_dir, config.theme_name, 'public'); }
   //  app.set('views', path.join(config.theme_dir, config.theme_name, 'templates'));
   //  app.set('layout', 'layout');
-
-
 
   app.set('view engine', 'html');
   app.enable('view cache');
@@ -96,18 +100,20 @@ function initialize(config) {
   let iconPath = path.join(config.public_dir, 'sites', site, '/icon.png')
   if (fse.existsSync(iconPath)) {
     app.use(favicon(iconPath));
-  } else{
+  } else {
     iconPath = path.join(config.public_dir, 'sites', site, '/icon.svg')
-    console.log(iconPath)
-    if (fse.existsSync(iconPath)) 
+    // console.log(iconPath)
+    if (fse.existsSync(iconPath))
       app.use(favicon(iconPath));
-  else
-  app.use(favicon(path.join(config.public_dir, '/icon.png'))); 
+    else
+      app.use(favicon(path.join(config.public_dir, '/icon.png')));
   }
   // app.use(favicon(path.join(__dirname, '..', 'public', '/icon.png')));   # 
   app.use(logger('dev'));
   app.use(body_parser.json());
-  app.use(body_parser.urlencoded({ extended: false }));
+  app.use(body_parser.urlencoded({
+    extended: false
+  }));
   app.use(cookie_parser());
   app.use(express.static(config.public_dir));
   if (config.theme_dir !== path.join(__dirname, '..', 'themes')) {
@@ -135,7 +141,7 @@ function initialize(config) {
 
     router.post('/rn-login', route_login);
     router.get('/logout', route_logout);
-    router.get('/login', route_login_page);
+    router.get('/login/:callback?', route_login);
   }
 
   // Online Editor Routes

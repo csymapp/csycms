@@ -87,6 +87,7 @@
     "moment": "2.22.2",
     "morgan": "1.9.1",
     "passport": "0.4.0",
+    "passport-github": "^1.1.0",
     "passport-google-oauth20": "1.0.0",
     "popper.js": "1.14.5",
     "sanitize-filename": "1.6.1",

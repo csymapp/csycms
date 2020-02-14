@@ -75,8 +75,13 @@ function route_wildcard(config, reffilePaths) {
 
     let preMeta = {};
     if (slug === undefined) {
-      slug = '/errorpages/404.error.md'
-      preMeta.response_code = 404;
+      if (req.auth) {
+        slug = '/errorpages/loggedIn.md'
+        preMeta.response_code = 404; // 404 is a temporary work around because of allowErrorPages()
+      } else {
+        slug = '/errorpages/404.error.md'
+        preMeta.response_code = 404;
+      }
     }
     let file_path = path.normalize(config.content_dir + slug);
     file_path = file_path.replace(/\/00\./g, '/')
@@ -86,6 +91,8 @@ function route_wildcard(config, reffilePaths) {
       file_path = file_path.slice(0, -suffix.length - 1);
     }
 
+
+    // auAuthorized...
     fs.readFile(file_path, 'utf8', function (error, content) {
       // if (error) {
       //   preMeta.response_code = 404;
@@ -109,6 +116,15 @@ function route_wildcard(config, reffilePaths) {
         meta.custom_title = meta.title;
         if (!meta.title) {
           meta.title = contentProcessors.slugToTitle(file_path);
+        }
+
+        meta.protected === 'false' ? meta.protected === false : meta.protected === 'true' ? meta.protected === true : false;
+        if (!req.session) req.session = {}
+        if (meta.protected && !req.session.accessToken) {
+          let filePath401 = path.join(config.content_dir, '/errorpages/unauthorized.md')
+          content = fs.readFileSync(filePath401, 'utf-8')
+          meta = contentProcessors.processMeta(content);
+          meta.response_code = 401;
         }
         // Content
         content = contentProcessors.stripMeta(content);
@@ -159,7 +175,7 @@ function route_wildcard(config, reffilePaths) {
 
         // slug = reffilePaths.modified[pathIndex]
         // console.log(meta.response_code)
-        if (!meta.response_code || meta.response_code==200) slug = reffilePaths.modified[pathIndex]
+        if (!meta.response_code || meta.response_code == 200) slug = reffilePaths.modified[pathIndex]
         const removeParent = (pages) => {
           let modified = false;
           for (let i in pages) {
@@ -302,21 +318,29 @@ function route_wildcard(config, reffilePaths) {
         }
         let toc;
         // let last_modified = utils.getLastModified(config, meta, file_path);
+        console.log(layout)
+        console.log(render)
         let author;
-        author = meta.metadata.author?meta.metadata.author:false;
+        author = meta.metadata.author ? meta.metadata.author : false;
         // content = content.split('%7B%7B%7Bcself%7D%7D%7D').join(config.site);
-        
+
         // content = content.split('{{{cself}}}').join(`${config.domain}/sites/${config.site}`);
-        let domain = config.domain.split('http://').length > 1? config.domain: config.domain.split('http://').length > 1?config.domain: 'http://' + config.domain;
-        console.log(domain)
-        console.log(config.domain)
+        let domain = config.domain.split('http://').length > 1 ? config.domain : config.domain.split('http://').length > 1 ? config.domain : 'http://' + config.domain;
+        // console.log(domain)
+        // console.log(config.domain)
         content = content.split('%7B%7B%7Bcself%7D%7D%7D').join(`${domain}/sites/${config.site}`);
         content = content.split('{{{cself}}}').join(`${domain}/sites/${config.site}`);
+        content = content.split('{{{cself-}}}').join(`${domain}`);
+        content = content.split('%7B%7B%7Bcself-%7D%7D%7D').join(`${domain}`);
         // content = content.split('{{{cself}}}').join(config.site);
         // console.log(content)
         // if(meta.metadata.author) lastmo
-        meta.toc === false? toc = false: (meta.toc === 'false'? toc = false:  (meta.toc === undefined? toc = true: toc= 'toc'));
+        meta.toc === false ? toc = false : (meta.toc === 'false' ? toc = false : (meta.toc === undefined ? toc = true : toc = 'toc'));
+
+        console.log(render)
+        console.log(render)
         if (!meta.response_code) meta.response_code = 200
+
         return res.status(meta.response_code).render(render, {
           config: config,
           pages: retpageList,
@@ -332,7 +356,8 @@ function route_wildcard(config, reffilePaths) {
           navSlugs,
           breadCrumbs,
           Toc: toc,
-          layout
+          layout,
+          auth: req.auth ? JSON.stringify(req.auth) : ''
         });
       }
 
