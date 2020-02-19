@@ -3,7 +3,6 @@
   "version": "1.0.1",
   "description": "Markdown powered Knowledgebase",
   "author": "Brian Onang'o <surgbc@gmail.com>",
-  "license": "Apache2",
   "keywords": [
     "CSYCMS",
     "csycms",
@@ -28,7 +27,7 @@
   ],
   "licenses": [
     {
-      "type": "MIT",
+      "type": "Apache-2.0",
       "url": "https://raw.githubusercontent.com/csymapp/csycms/master/LICENSE"
     }
   ],
