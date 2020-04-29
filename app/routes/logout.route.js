@@ -5,7 +5,9 @@ function route_logout (req, res, next) {
   if(!req.session)req.session = {}
   req.session.loggedIn = false;
   req.session.username = null;
-  res.redirect('/login');
+  req.session.accessToken = null;
+  let redirectUrl = req.query.redirectUrl || '/'
+  res.redirect(redirectUrl);
 }
 
 // Exports
