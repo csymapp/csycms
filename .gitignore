@@ -12,6 +12,7 @@ public/themes
 public/sites
 config/
 layouts/
+config.example
 
 # Logs
 logs

@@ -58,6 +58,7 @@ module.exports = function (ROOTPATH) {
     // Which Theme to Use?
     theme_dir: path.join(ROOTPATH, '..', 'themes'),
     theme_name: 'default',
+    theme_name_secondary: 'gospelSounders',
 
     // Specify the path of your content folder where all your '.md' files are located
     // Fix: Needs trailing slash for now!
