@@ -30,7 +30,7 @@ module.exports = function (ROOTPATH) {
     support_email: '',
 
     // Footer Text / Copyright
-    copyright: 'Copyright &copy; 2018 - ' + new Date().getFullYear() + ' - <a href="http://www.cseco.co.ke">CSECO</a>',
+    copyright: 'Copyright &copy; 2018 - ' + new Date().getFullYear() + ' - <a class="a-a-logo" href="http://www.cseco.co.ke">CSECO</a>',
     github: 'https://github.com/csymapp/',
     facebook: false,
     youtube: false,
