@@ -23,7 +23,7 @@ let csycms = require('../app/index.js');
 // This can be done inline, with a JSON file,
 // or with a Node.js module as we do below.
 let config = require(`../config/${site}/system.config.js`)(__dirname);
-
+  
 // Finally, we initialize csycms
 // with our configuration object
 let app = csycms(config);

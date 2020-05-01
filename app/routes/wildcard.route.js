@@ -288,6 +288,9 @@ function route_wildcard(config, reffilePaths) {
 
         let layout, theme = config.theme_name
         if (meta.theme) theme = meta.theme
+        console.log('theme->', theme)
+        
+        
         // if(meta.page)
         //   render = path.join(theme, 'templates', meta.page)
         // else 
@@ -305,7 +308,10 @@ function route_wildcard(config, reffilePaths) {
           layout = path.join(config.site, theme, meta.layout)
         else
           layout = path.join(config.site, theme, 'layout')
-
+//           console
+//           console.log(render)
+//           console.log(layout)
+// console.log(meta);process.exit();
         if (meta.redirect) {
           let redirectPath = meta.redirect
           let resCode = redirectPath.match(/\[(.*?)\]/);
