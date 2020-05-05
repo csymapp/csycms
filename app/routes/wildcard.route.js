@@ -20,12 +20,6 @@ const contentProcessors = require('../functions/contentProcessors');
 const contentsHandler = require('../core/contents');
 const utils = require('../core/utils');
 
-// import markdownItMermaid from 'markdown-it-mermaid'
-const markdownItMermaid = require('markdown-it-mermaid')
-
-
-// console.log(markdownItMermaid)
-// process.exit()
 md.use(markdownItAttrs);
 md.use(require('markdown-it-imsize'))
 md.use(require('markdown-it-checkbox'));
@@ -33,9 +27,9 @@ md.use(require('markdown-it-math'));
 md.use(require('markdown-it-fontawesome'));
 md.use(require('markdown-it-decorate'));
 md.use(require('markdown-it-div'));
-// md.use(markdownItMermaid);
-// md.use(require('markdown-it-vue'));
-// md.use(require('markdown-it-container'), '[ui-tabs]');
+// console.log(require('markdown-it-div').toString())
+md.use(require('markdown-it-mermaid').default);
+md.use(require('markdown-it-container'), '[ui-tabs]');
 
 function route_wildcard(config, reffilePaths) {
   return function (req, res, next) {

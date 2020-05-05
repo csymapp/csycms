@@ -116,6 +116,9 @@ function processVars (markdownContent, config) {
   if (config.image_url) {
     markdownContent = markdownContent.replace(/%image_url%/g, config.image_url);
   }
+  // public_url
+  markdownContent = markdownContent.replace(/%public_url%/g,`${config.base_url}/sites/${config.site}`);
+
   return markdownContent;
 }
 
