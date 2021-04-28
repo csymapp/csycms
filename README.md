@@ -2,7 +2,7 @@
 
 <img src="./markups/info.svg">
 
-This repo has been deprecated and split into two different projects:
+This repo has been deprecated (and archived) and split into two different projects:
 1. [csycms-cli](https://github.com/csymapp/csycms-cli)
 2. [csycms-core](https://github.com/csymapp/csycms-core)
 
