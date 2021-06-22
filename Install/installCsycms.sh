@@ -58,8 +58,8 @@ main() {
     
     mkdir -p /var/www/html
     cd /var/www/html
-    git clone https://github.com/csymapp/csycms.git
-    cd csycms
+    git clone https://github.com/csymapp/csycms.git csycms_v1
+    cd csycms_v1
     
     tput bold;  echo "Mr. Brian: I am checking for updates."; tput sgr0
     git pull origin master
@@ -130,10 +130,10 @@ main() {
     tput bold;  echo "Mr. Brian: I am now going through configuration files."; tput sgr0
     tput bold;  echo "Mr. Brian: I am now trying to start the service."; tput sgr0
     sudo systemctl daemon-reload
-    sudo systemctl enable csycms.service
-    sudo systemctl start csycms.service
-    sudo systemctl restart csycms.service
-    sudo systemctl status csycms.service
+    sudo systemctl enable csycms_v1.service
+    sudo systemctl start csycms_v1.service
+    sudo systemctl restart csycms_v1.service
+    sudo systemctl status csycms_v1.service
     
 }
 

@@ -1,0 +1,15 @@
+[Unit]
+Description=csycms_v1
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/var/www/html/csycms_v1
+ExecStart=/var/www/html/csycms_v1/start.sh
+SyslogIdentifier=CSYCMS_V1
+Restart=on-failure
+RestartSec=5
+
+
+[Install]
+WantedBy=multi-user.target
